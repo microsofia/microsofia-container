@@ -1,0 +1,3 @@
+microsofia.container.module.property.PropertyModule
+microsofia.container.module.db.jdbc.JDBCModule
+microsofia.container.module.db.jpa.JPAModule
