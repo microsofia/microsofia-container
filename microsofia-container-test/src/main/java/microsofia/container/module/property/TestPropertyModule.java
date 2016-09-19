@@ -3,13 +3,14 @@ package microsofia.container.module.property;
 import javax.inject.Inject;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import microsofia.container.application.TestApplication;
+import microsofia.container.module.AbstractTestModule;
 
-@RunWith(TestApplication.JUnitLauncher.class)
-public class TestPropertyModule {
+public class TestPropertyModule extends AbstractTestModule{
 	@Inject
 	@Property("k1")
 	private String v1;
@@ -32,6 +33,4 @@ public class TestPropertyModule {
 		Assert.assertEquals("v2",v2);
 		Assert.assertEquals(3,v3);
 	}
-
-	public static TestPropertyModule instance;
 }

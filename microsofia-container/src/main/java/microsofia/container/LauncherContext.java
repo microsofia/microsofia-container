@@ -2,7 +2,6 @@ package microsofia.container;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.google.inject.Module;
 
@@ -11,7 +10,7 @@ import microsofia.container.module.IModule;
 
 public class LauncherContext {
 	private List<Module> guiceModules;
-	private List<IModule> coreModules;
+	private List<IModule> containerModules;
 	private ApplicationConfig applicationConfig;
 	
 	public LauncherContext(){
@@ -25,24 +24,13 @@ public class LauncherContext {
 	public List<Module> getGuiceModules(){
 		return guiceModules;
 	}
-
-	//not extra, think of better way
-	public <T> T getCoreModule(Class<T> c) {
-		Optional<T> op=coreModules.stream().filter(it->c.isAssignableFrom(it.getClass()))
-								           .map(it->{return c.cast(it);})
-								           .findFirst();
-		if (!op.isPresent()){
-			throw new IllegalStateException("Could not find module of type "+c);
-		}
-		return op.get();
-	}
 	
-	public List<IModule> getCoreModules() {
-		return coreModules;
+	public List<IModule> getContainerModules() {
+		return containerModules;
 	}
 
-	public void setCoreModules(List<IModule> coreModules) {
-		this.coreModules = coreModules;
+	public void setContainerModules(List<IModule> containerModules) {
+		this.containerModules = containerModules;
 	}
 
 	public ApplicationConfig getCurrentApplicationConfig() {

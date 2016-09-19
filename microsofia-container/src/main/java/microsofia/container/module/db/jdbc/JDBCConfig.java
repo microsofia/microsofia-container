@@ -4,15 +4,14 @@ import java.util.Properties;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 import com.zaxxer.hikari.HikariConfig;
 
+import microsofia.container.module.ResourceConfig;
+
 @XmlAccessorType(XmlAccessType.FIELD)
-public class JDBCConfig {
-	@XmlAttribute
-	private String name;
+public class JDBCConfig extends ResourceConfig{
 	@XmlElement
 	private Long connectionTimeout;
 	@XmlElement   
@@ -67,14 +66,6 @@ public class JDBCConfig {
 	public JDBCConfig(){
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public Long getConnectionTimeout() {
 		return connectionTimeout;
 	}

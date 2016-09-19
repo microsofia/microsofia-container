@@ -1,11 +1,9 @@
 package microsofia.container.module.db.jpa;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.SessionFactory;
@@ -16,54 +14,46 @@ import com.google.inject.Key;
 import com.google.inject.Provider;
 
 import microsofia.container.LauncherContext;
-import microsofia.container.module.AbstractModule;
+import microsofia.container.application.PropertyConfig;
+import microsofia.container.module.ResourceBasedModule;
 import microsofia.container.module.db.jdbc.IJDBCModule;
-import microsofia.container.module.property.PropertyConfig;
 
-public class JPAModule extends AbstractModule{
-	private Map<String,JPAConfig> jpaConfigs;
-	private Map<String,EntityManagerFactory> emfs;
+public class JPAModule extends ResourceBasedModule<JPAImpl, JPAConfig,EntityManagerFactory> implements IJPAModule{
+	@Inject
 	private IJDBCModule jdbcModule;
 	
 	public JPAModule(){
-		jpaConfigs=new Hashtable<>();
-		emfs=new Hashtable<>();
+		super(EntityManagerFactory.class);
 	}
 
 	@Override
-	public void preInit(LauncherContext context){
-		jdbcModule=context.getCoreModule(IJDBCModule.class);
-
-		List<JPAConfig> cs=context.getCurrentApplicationConfig().getJPAConfigs();
-		cs.forEach(it->{
-			jpaConfigs.put(it.getName(), it);
-		});
-
-		context.addGuiceModule(new GuiceJPAModule());
+	protected EntityManagerFactory createResource(String name, JPAConfig c) {
+		List<String> managedClassNames=new ArrayList<String>();//TODO how to get the classes to load
+		JPAPersistenceUnitInfo unit=new JPAPersistenceUnitInfo(name, managedClassNames, PropertyConfig.toPoperties(c.getProperties()));
+		unit.setNonJtaDataSource(jdbcModule.getDataSource(c.getDatabasename()));
+	    //TODO implement jtaDataSource;
+		
+		EntityManagerFactoryBuilderImpl emfBuilder=new EntityManagerFactoryBuilderImpl(new PersistenceUnitInfoDescriptor(unit),null);
+		return emfBuilder.build();
 	}
 
-	public EntityManagerFactory getEntityManagerFactory(String name){
-		EntityManagerFactory emf=emfs.get(name);
-		if (emf!=null){
-			return emf;
-		}
-		synchronized(this){
-			emf=emfs.get(name);
-			if (emf!=null){
-				return emf;
-			}
-			JPAConfig config=jpaConfigs.get(name);
-			List<String> managedClassNames=new ArrayList<String>();//TODO how to get the classes to load
-			JPAPersistenceUnitInfo unit=new JPAPersistenceUnitInfo(name, managedClassNames, PropertyConfig.toPoperties(config.getProperties()));
-			unit.setNonJtaDataSource(jdbcModule.getDataSource(config.getDatabasename()));
-		    //TODO implement jtaDataSource;
-			
-			EntityManagerFactoryBuilderImpl emfBuilder=new EntityManagerFactoryBuilderImpl(new PersistenceUnitInfoDescriptor(unit),null);
-			emf= emfBuilder.build();
+	@Override
+	protected JPAImpl createResourceAnnotation(String name) {
+		return new JPAImpl(name);
+	}
+	
+	@Override
+	protected List<JPAConfig> getResourceConfig(LauncherContext context) {
+		return context.getCurrentApplicationConfig().getJPAConfigs();
+	}
 
-			emfs.put(name, emf);
-		}
-		return emf;
+	@Override
+	protected com.google.inject.AbstractModule createGuiceModule() {
+		return new GuiceJPAModule();
+	}
+	
+	public EntityManagerFactory getEntityManagerFactory(String name){
+		return getResource(name);
 	}
 	
 	public SessionFactory getSessionFactory(String name){
@@ -71,41 +61,18 @@ public class JPAModule extends AbstractModule{
 		return emf.unwrap(SessionFactory.class);
 	}
 	
-	protected class GuiceJPAModule extends com.google.inject.AbstractModule{
+	protected class GuiceJPAModule extends GuiceModule{
 
 		protected GuiceJPAModule(){
 		}
 		
 		@Override
 		protected void configure(){			
-			jpaConfigs.entrySet().forEach(it->{
-				bind(Key.get(EntityManagerFactory.class,new JPAImpl(it.getKey()))).toProvider(new EntityManagerFactoryProvider(it.getKey()));
+			super.configure();
+			bind(IJPAModule.class).toInstance(JPAModule.this);
+			configs.entrySet().forEach(it->{
 				bind(Key.get(SessionFactory.class,new JPAImpl(it.getKey()))).toProvider(new SessionFactoryProvider(it.getKey()));
 			});
-			
-		}
-	}
-
-	protected class EntityManagerFactoryProvider implements Provider<EntityManagerFactory>{
-		private String name;
-		private EntityManagerFactory emf;
-		
-		EntityManagerFactoryProvider(String name){
-			this.name=name;
-		}
-		
-		@Override
-		public EntityManagerFactory get() {
-			if (emf!=null){
-				return emf;
-			}
-			synchronized(this){
-				if (emf!=null){
-					return emf;
-				}
-				emf=getEntityManagerFactory(name);
-			}
-			return emf;
 		}
 	}
 
@@ -131,5 +98,4 @@ public class JPAModule extends AbstractModule{
 			return sf;
 		}
 	}
-
 }

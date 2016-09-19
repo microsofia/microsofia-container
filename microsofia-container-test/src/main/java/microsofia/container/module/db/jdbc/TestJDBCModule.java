@@ -6,13 +6,14 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import microsofia.container.application.TestApplication;
+import microsofia.container.module.AbstractTestModule;
 
-@RunWith(TestApplication.JUnitLauncher.class)
-public class TestJDBCModule {
+public class TestJDBCModule extends AbstractTestModule{
 	@Inject
 	@JDBC("db1")
 	private DataSource source1;
@@ -22,7 +23,7 @@ public class TestJDBCModule {
 	
 	public TestJDBCModule(){
 	}
-
+	
 	@Test
 	public void testSource1(){
 		Assert.assertNotNull("Couldn't inject database source db1.",source1);
@@ -44,6 +45,4 @@ public class TestJDBCModule {
 			Assert.assertNull(e);
 		}
 	}
-	
-	public static TestJDBCModule instance;
 }

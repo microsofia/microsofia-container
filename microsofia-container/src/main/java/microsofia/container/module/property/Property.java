@@ -7,9 +7,6 @@ import java.lang.annotation.Target;
 
 import com.google.inject.BindingAnnotation;
 
-/*
- * TODO: separate API from impl
- * */
 @BindingAnnotation
 @Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD }) 
 @Retention(RetentionPolicy.RUNTIME)

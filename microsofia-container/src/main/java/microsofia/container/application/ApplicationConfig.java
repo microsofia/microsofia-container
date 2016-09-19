@@ -19,7 +19,6 @@ import org.w3c.dom.Element;
 
 import microsofia.container.module.db.jdbc.JDBCConfig;
 import microsofia.container.module.db.jpa.JPAConfig;
-import microsofia.container.module.property.PropertyConfig;
 
 @XmlRootElement(name="application")
 @XmlAccessorType(XmlAccessType.FIELD)

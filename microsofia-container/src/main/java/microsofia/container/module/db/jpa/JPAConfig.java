@@ -9,12 +9,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
-import microsofia.container.module.property.PropertyConfig;
+import microsofia.container.application.PropertyConfig;
+import microsofia.container.module.ResourceConfig;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class JPAConfig {
-	@XmlAttribute
-	private String name;
+public class JPAConfig extends ResourceConfig{
 	@XmlAttribute
 	private String databasename;
 	@XmlElementWrapper(name="properties")
@@ -23,14 +22,6 @@ public class JPAConfig {
 
 	public JPAConfig(){
 		properties=new ArrayList<PropertyConfig>();
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getDatabasename() {

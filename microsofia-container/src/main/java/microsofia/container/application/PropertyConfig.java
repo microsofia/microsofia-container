@@ -1,4 +1,4 @@
-package microsofia.container.module.property;
+package microsofia.container.application;
 
 import java.util.List;
 import java.util.Properties;
@@ -7,11 +7,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
-//TODO move to common
+import microsofia.container.module.ResourceConfig;
+
 @XmlAccessorType(XmlAccessType.FIELD)
-public class PropertyConfig {
-	@XmlAttribute
-	private String name;
+public class PropertyConfig extends ResourceConfig{
 	@XmlAttribute
 	private String value;
 	
@@ -23,14 +22,6 @@ public class PropertyConfig {
 		value=v;
 	}
 	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getValue() {
 		return value;
 	}
@@ -40,7 +31,7 @@ public class PropertyConfig {
 	}
 	
 	public String toString(){
-		return "Name="+name+", Value="+value;
+		return super.toString()+"[Value="+value+"]";
 	}
 
 	public static Properties toPoperties(List<PropertyConfig> cs){

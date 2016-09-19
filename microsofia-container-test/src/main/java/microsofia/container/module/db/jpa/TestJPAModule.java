@@ -5,13 +5,14 @@ import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.SessionFactory;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import microsofia.container.application.TestApplication;
+import microsofia.container.module.AbstractTestModule;
 
-@RunWith(TestApplication.JUnitLauncher.class)
-public class TestJPAModule {
+public class TestJPAModule extends AbstractTestModule{
 	@Inject
 	@JPA("jpa1")
 	private EntityManagerFactory emf1;
@@ -27,7 +28,7 @@ public class TestJPAModule {
 	
 	public TestJPAModule(){
 	}
-
+	
 	@Test
 	public void testJPA1(){
 		Assert.assertNotNull("Couldn't inject JPA source db1.",emf1);
@@ -53,6 +54,4 @@ public class TestJPAModule {
 			Assert.assertNull(e);
 		}*/
 	}
-
-	public static TestJPAModule instance;
 }

@@ -54,10 +54,16 @@ public class Launcher {
 	private void preInitModules(LauncherContext context){
 		ServiceLoader<IModule> moduleLoader=ServiceLoader.load(IModule.class,Launcher.class.getClassLoader());
 		moduleLoader.forEach(modules::add);
-		context.setCoreModules(modules);
+		context.setContainerModules(modules);
 		
 		modules.stream().forEach(it->{
 			it.preInit(context);
+		});
+	}
+	
+	private void injectMembers(Injector injector){
+		modules.stream().forEach(it->{
+			injector.injectMembers(it);
 		});
 	}
 	
@@ -83,6 +89,7 @@ public class Launcher {
 		if (application==null){
 			throw new IllegalStateException("No application with type "+applicationConfig.getType()+" is found.");
 		}
+		injector.injectMembers(application);
 		application.preInit(context);
 		application.postInit(injector);
 		return application;
@@ -95,10 +102,16 @@ public class Launcher {
 		log.info("Loading modules...");
 		preInitModules(context);
 		
-		log.info("Loading applications...");
+		log.info("Loading application(s)...");
 		loadApplications(context);
 	
 		Injector injector=Guice.createInjector(context.getGuiceModules());
+		
+		log.info("Injecting in modules...");
+		injectMembers(injector);
+		
+		log.info("Loading applications...");
+		loadApplications(context);
 
 		//all modules should be initiated
 		log.info("Initializing modules...");

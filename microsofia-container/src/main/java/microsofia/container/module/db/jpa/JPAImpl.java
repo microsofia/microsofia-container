@@ -2,22 +2,18 @@ package microsofia.container.module.db.jpa;
 
 import java.lang.annotation.Annotation;
 
-public class JPAImpl implements JPA{
-	private String name;
+import microsofia.container.module.ResourceAnnotation;
+
+class JPAImpl extends ResourceAnnotation implements JPA{
 	
 	public JPAImpl(String name){
-		this.name=name;
+		super(name);
 	}
 	
 	@Override
 	public Class<? extends Annotation> annotationType() {
 		return JPA.class;
 	}
-
-	@Override
-	public String value() {
-		return name;
-	}	
 
 	 @Override 
 	 public boolean equals(Object o) {
@@ -27,15 +23,5 @@ public class JPAImpl implements JPA{
 
 		 JPA other = (JPA) o;
 	     return name.equals(other.value());
-	 }
-
-	 @Override 
-	 public int hashCode() {
-		 return (127 * "value".hashCode()) ^ name.hashCode();
-	 }
-
-	 @Override 
-	 public String toString() {
-		 return "@" + JPA.class.getName() + "(value=" + name + ")";
 	 }
 }
