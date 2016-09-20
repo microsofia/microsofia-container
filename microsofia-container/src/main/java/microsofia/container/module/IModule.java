@@ -7,10 +7,14 @@ import microsofia.container.LauncherContext;
  * -inject JMS
  * -inject service: REST, RMI, RMI ++ (netty)
  * -inject ...
+ * 
+ * - have utilities injection, like ILifecycle interface, etc
  * */
 public interface IModule {
 
 	public void preInit(LauncherContext context);
 
 	public void postInit(Injector injector);
+
+	public void stop();
 }

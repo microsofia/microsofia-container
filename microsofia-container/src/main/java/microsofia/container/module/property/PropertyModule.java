@@ -9,12 +9,13 @@ import microsofia.container.LauncherContext;
 import microsofia.container.application.PropertyConfig;
 import microsofia.container.module.ResourceBasedModule;
 
+//TODO use cmdline in order to do replacement ${}
 public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyConfig,String> implements IPropertyModule{
 
 	public PropertyModule(){
 		super(String.class);
 	}
-
+	
 	@Override
 	protected List<PropertyConfig> getResourceConfig(LauncherContext context) {
 		return context.getCurrentApplicationConfig().getProperties();
@@ -24,6 +25,10 @@ public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyCo
 	protected String createResource(String name, PropertyConfig c) {
 		return c.getValue();
 	}
+	
+	@Override
+	protected void stop(String resource){		
+	}
 
 	@Override
 	protected PropertyImpl createResourceAnnotation(String name) {
@@ -31,8 +36,8 @@ public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyCo
 	}
 	
 	@Override
-	protected com.google.inject.AbstractModule createGuiceModule() {
-		return new GuicePropertyModule();
+	protected com.google.inject.AbstractModule createGuiceModule(LauncherContext context) {
+		return new GuicePropertyModule(context);
 	}	
 	
 	public String getProperty(String name){
@@ -41,7 +46,8 @@ public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyCo
 	
 	protected class GuicePropertyModule extends GuiceModule{
 
-		protected GuicePropertyModule(){
+		protected GuicePropertyModule(LauncherContext context){
+			super(context);
 		}
 		
 		@Override

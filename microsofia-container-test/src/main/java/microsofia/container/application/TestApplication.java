@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
@@ -14,12 +15,21 @@ import org.junit.runner.Computer;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Binder;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 
 import microsofia.container.Launcher;
 import microsofia.container.LauncherContext;
 import microsofia.container.application.AbstractApplication;
 import microsofia.container.application.ApplicationDescriptor;
+import microsofia.container.module.endpoint.IEndpointModule;
+import microsofia.container.module.endpoint.EndpointDescriptor;
+import microsofia.container.module.endpoint.TestEndpointModule;
+import microsofia.container.module.endpoint.TestEndpointModule.ISample1;
+import microsofia.container.module.endpoint.TestEndpointModule.ISample3;
+import microsofia.container.module.endpoint.TestEndpointModule.Sample3;
 
 public class TestApplication extends AbstractApplication{
 	private static TestApplication instance;
@@ -28,6 +38,12 @@ public class TestApplication extends AbstractApplication{
 	public TestApplication(){
 		applicationDescriptor=new ApplicationDescriptor();
 		applicationDescriptor.setType("testapp");
+		EndpointDescriptor sd=new EndpointDescriptor("rest1");
+		sd.addClientInterface(TestEndpointModule.ISample1.class);
+		sd.addClientInterface(TestEndpointModule.ISample2.class);
+		sd.addClientInterface(TestEndpointModule.ISample3.class);
+
+		applicationDescriptor.getEndpointsDescriptor().addDescriptor(sd);
 	}
 
 	public Injector getInjector(){
@@ -37,6 +53,13 @@ public class TestApplication extends AbstractApplication{
 	@Override
 	public void preInit(LauncherContext context) {
 		instance=this;
+		context.addGuiceModule(new AbstractModule() {
+			
+			@Override
+			protected void configure() {
+				bind(ISample3.class).to(Sample3.class);
+			}
+		});
 	}
 
 	@Override

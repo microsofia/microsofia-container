@@ -21,6 +21,7 @@ public class Launcher {
 	private List<IModule> modules;
 	private ApplicationConfig applicationConfig;
 	private List<IApplication> applications;
+	private IApplication currentApplication;
  	
 	public Launcher(){
 		modules=new ArrayList<>();
@@ -29,6 +30,10 @@ public class Launcher {
 
 	public List<IModule> getModules(){
 		return modules;
+	}
+	
+	public IApplication getCurrentApplication(){
+		return currentApplication;
 	}
 	
 	public List<IApplication> getApplications(){
@@ -61,7 +66,7 @@ public class Launcher {
 		});
 	}
 	
-	private void injectMembers(Injector injector){
+	private void injectModuleMembers(Injector injector){
 		modules.stream().forEach(it->{
 			injector.injectMembers(it);
 		});
@@ -73,26 +78,28 @@ public class Launcher {
 		});
 	}
 	
-	private void loadApplications(LauncherContext context){
+	private IApplication loadApplication(LauncherContext context){
 		ServiceLoader<IApplication> moduleLoader=ServiceLoader.load(IApplication.class,Launcher.class.getClassLoader());
 		moduleLoader.forEach(applications::add);
-	}
-	
-	private IApplication postInitApplication(LauncherContext context,Injector injector){
-		IApplication application=null;
+		
+		currentApplication=null;
 		for (IApplication a : applications){//should be put in a map if nb increases...
 			if (a.getDescriptor().getType().equals(applicationConfig.getType())){
-				application=a;
+				currentApplication=a;
 				break;
 			}
 		}
-		if (application==null){
+		if (currentApplication==null){
 			throw new IllegalStateException("No application with type "+applicationConfig.getType()+" is found.");
 		}
+		context.setCurrentApplication(currentApplication);
+		currentApplication.preInit(context);
+		return currentApplication;
+	}
+	
+	private void postInitApplication(LauncherContext context,Injector injector,IApplication application){
 		injector.injectMembers(application);
-		application.preInit(context);
 		application.postInit(injector);
-		return application;
 	}
 	
 	public IApplication start() throws Throwable{
@@ -103,27 +110,29 @@ public class Launcher {
 		preInitModules(context);
 		
 		log.info("Loading application(s)...");
-		loadApplications(context);
+		currentApplication=loadApplication(context);
 	
 		Injector injector=Guice.createInjector(context.getGuiceModules());
 		
 		log.info("Injecting in modules...");
-		injectMembers(injector);
+		injectModuleMembers(injector);
 		
-		log.info("Loading applications...");
-		loadApplications(context);
-
 		//all modules should be initiated
 		log.info("Initializing modules...");
 		postInitModules(injector);
 		
 		//not all applications initiated, only configured ones
 		log.info("Initializing application...");
-		IApplication application=postInitApplication(context,injector);
+		postInitApplication(context,injector,currentApplication);
 
 		log.info("Running the application...");
-		application.run();
-		return application;
+		currentApplication.run();
+		return currentApplication;
+	}
+
+	public void stop(){
+		modules.forEach(IModule::stop);
+		currentApplication.stop();
 	}
 	
 	public static void main(String[] argv, Element[] element) throws Throwable{

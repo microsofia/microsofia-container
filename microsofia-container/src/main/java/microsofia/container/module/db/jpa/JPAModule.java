@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl;
@@ -25,16 +26,21 @@ public class JPAModule extends ResourceBasedModule<JPAImpl, JPAConfig,EntityMana
 	public JPAModule(){
 		super(EntityManagerFactory.class);
 	}
-
+	
 	@Override
 	protected EntityManagerFactory createResource(String name, JPAConfig c) {
-		List<String> managedClassNames=new ArrayList<String>();//TODO how to get the classes to load
+		List<String> managedClassNames=new ArrayList<String>();//TODO use ApplicationDescriptor
 		JPAPersistenceUnitInfo unit=new JPAPersistenceUnitInfo(name, managedClassNames, PropertyConfig.toPoperties(c.getProperties()));
 		unit.setNonJtaDataSource(jdbcModule.getDataSource(c.getDatabasename()));
 	    //TODO implement jtaDataSource;
 		
 		EntityManagerFactoryBuilderImpl emfBuilder=new EntityManagerFactoryBuilderImpl(new PersistenceUnitInfoDescriptor(unit),null);
 		return emfBuilder.build();
+	}
+	
+	@Override
+	protected void stop(EntityManagerFactory resource){	
+		resource.close();
 	}
 
 	@Override
@@ -48,8 +54,8 @@ public class JPAModule extends ResourceBasedModule<JPAImpl, JPAConfig,EntityMana
 	}
 
 	@Override
-	protected com.google.inject.AbstractModule createGuiceModule() {
-		return new GuiceJPAModule();
+	protected com.google.inject.AbstractModule createGuiceModule(LauncherContext context) {
+		return new GuiceJPAModule(context);
 	}
 	
 	public EntityManagerFactory getEntityManagerFactory(String name){
@@ -63,7 +69,8 @@ public class JPAModule extends ResourceBasedModule<JPAImpl, JPAConfig,EntityMana
 	
 	protected class GuiceJPAModule extends GuiceModule{
 
-		protected GuiceJPAModule(){
+		protected GuiceJPAModule(LauncherContext context){
+			super(context);
 		}
 		
 		@Override

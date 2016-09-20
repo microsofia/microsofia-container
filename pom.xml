@@ -79,6 +79,36 @@
 				<artifactId>hibernate-jpa-2.1-api </artifactId>
 				<version>1.0.0.Final</version>
 			</dependency>
+	    	<dependency>
+		      <groupId>org.jboss.resteasy</groupId>
+		      <artifactId>resteasy-jaxrs</artifactId>
+		      <version>3.0.19.Final</version>
+		   </dependency>
+		   <dependency>
+		      <groupId>org.jboss.resteasy</groupId>
+		      <artifactId>resteasy-client</artifactId>
+		      <version>3.0.19.Final</version>
+		   </dependency>
+		   <dependency>
+		      <groupId>org.eclipse.jetty</groupId>
+		      <artifactId>jetty-server</artifactId>
+		      <version>9.4.0.M1</version>
+		   </dependency>
+		   <dependency>
+		      <groupId>org.eclipse.jetty</groupId>
+		      <artifactId>jetty-servlet</artifactId>
+		      <version>9.4.0.M1</version>
+		   </dependency>
+		   <dependency>
+		      <groupId>org.eclipse.jetty</groupId>
+		      <artifactId>jetty-webapp</artifactId>
+		      <version>9.4.0.M1</version>
+		   </dependency>
+		   <dependency>
+		      <groupId>org.eclipse.jetty</groupId>
+		      <artifactId>jetty-util</artifactId>
+		      <version>9.4.0.M1</version>
+		   </dependency>
     	</dependencies>
     </dependencyManagement>
 </project>

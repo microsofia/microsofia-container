@@ -20,11 +20,17 @@ public class JDBCModule extends ResourceBasedModule<JDBCImpl, JDBCConfig,DataSou
 	public JDBCModule(){
 		super(DataSource.class);
 	}
-
+	
 	@Override
 	protected DataSource createResource(String name, JDBCConfig c) {
 		HikariConfig hikariConfig=c.createHikariConfig();
 		return new HikariDataSource(hikariConfig);
+	}
+	
+	@Override
+	protected void stop(DataSource resource){		
+		HikariDataSource hikariDataSource=(HikariDataSource)resource;
+		hikariDataSource.close();
 	}
 
 	@Override
@@ -38,8 +44,8 @@ public class JDBCModule extends ResourceBasedModule<JDBCImpl, JDBCConfig,DataSou
 	}
 
 	@Override
-	protected com.google.inject.AbstractModule createGuiceModule() {
-		return new GuiceJDBCModule();
+	protected com.google.inject.AbstractModule createGuiceModule(LauncherContext context) {
+		return new GuiceJDBCModule(context);
 	}	
 	
 	@Override
@@ -49,7 +55,8 @@ public class JDBCModule extends ResourceBasedModule<JDBCImpl, JDBCConfig,DataSou
 	
 	protected class GuiceJDBCModule extends GuiceModule{
 
-		protected GuiceJDBCModule(){
+		protected GuiceJDBCModule(LauncherContext context){
+			super(context);
 		}
 		
 		@Override

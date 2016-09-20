@@ -6,11 +6,14 @@ import java.util.List;
 import com.google.inject.Module;
 
 import microsofia.container.application.ApplicationConfig;
+import microsofia.container.application.ApplicationDescriptor;
+import microsofia.container.application.IApplication;
 import microsofia.container.module.IModule;
 
 public class LauncherContext {
 	private List<Module> guiceModules;
 	private List<IModule> containerModules;
+	private IApplication application;
 	private ApplicationConfig applicationConfig;
 	
 	public LauncherContext(){
@@ -31,6 +34,18 @@ public class LauncherContext {
 
 	public void setContainerModules(List<IModule> containerModules) {
 		this.containerModules = containerModules;
+	}
+
+	public ApplicationDescriptor getCurrentApplicationDescriptor(){
+		return application.getDescriptor();
+	}
+	
+	public IApplication getCurrentApplication() {
+		return application;
+	}
+
+	public void setCurrentApplication(IApplication application) {
+		this.application = application;
 	}
 
 	public ApplicationConfig getCurrentApplicationConfig() {

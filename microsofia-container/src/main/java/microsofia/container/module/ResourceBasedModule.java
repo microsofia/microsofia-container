@@ -21,7 +21,14 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 		configs=new Hashtable<>();
 		resources=new Hashtable<>();
 	}
+	
+	@Override
+	public void stop(){
+		resources.values().forEach(this::stop);
+	}
 
+	protected abstract void stop(R resource);
+	
 	protected abstract List<C> getResourceConfig(LauncherContext context);
 	
 	@Override
@@ -31,11 +38,11 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 			configs.put(it.getName(), it);
 		});
 
-		context.addGuiceModule(createGuiceModule());
+		context.addGuiceModule(createGuiceModule(context));
 	}
 
-	protected com.google.inject.AbstractModule createGuiceModule(){
-		return new GuiceModule();
+	protected com.google.inject.AbstractModule createGuiceModule(LauncherContext context){
+		return new GuiceModule(context);
 	}
 
 	protected abstract R createResource(String name,C c);
@@ -62,8 +69,10 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 	}
 	
 	protected class GuiceModule extends com.google.inject.AbstractModule{
+		protected LauncherContext context;
 
-		protected GuiceModule(){
+		protected GuiceModule(LauncherContext context){
+			this.context=context;
 		}
 		
 		@Override

@@ -87,5 +87,8 @@
 				</properties>				
 			</persistence-unit>
 		</persistence>
+		<endpoints>
+			<endpoint.rest name="rest1"/>
+		</endpoints>
    </application>
 </settings>

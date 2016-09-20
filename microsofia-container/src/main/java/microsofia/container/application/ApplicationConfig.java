@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -19,6 +20,7 @@ import org.w3c.dom.Element;
 
 import microsofia.container.module.db.jdbc.JDBCConfig;
 import microsofia.container.module.db.jpa.JPAConfig;
+import microsofia.container.module.endpoint.EndpointConfig;
 
 @XmlRootElement(name="application")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -36,12 +38,16 @@ public class ApplicationConfig {
 	@XmlElementWrapper(name="persistence")
 	@XmlElement(name="persistence-unit")
 	private List<JPAConfig> jpaConfigs;
+	@XmlElementWrapper(name="endpoints")
+	@XmlElementRef
+	private List<EndpointConfig> endpointConfigs;
 	
 	
 	public ApplicationConfig(){
 		properties=new ArrayList<>();
 		jdbcConfigs=new ArrayList<>();
 		jpaConfigs=new ArrayList<>();
+		endpointConfigs=new ArrayList<>();
 	}
 
 	public String getName() {
@@ -82,6 +88,14 @@ public class ApplicationConfig {
 
 	public void setJPAConfigs(List<JPAConfig> jpaConfigs) {
 		this.jpaConfigs = jpaConfigs;
+	}
+
+	public List<EndpointConfig> getEndpointConfigs() {
+		return endpointConfigs;
+	}
+
+	public void setEndpointConfigs(List<EndpointConfig> serviceConfigs) {
+		this.endpointConfigs = serviceConfigs;
 	}
 
 	public String toString(){
