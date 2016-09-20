@@ -72,9 +72,9 @@ public class Launcher {
 		});
 	}
 	
-	private void postInitModules(Injector injector){
+	private void postInitModules(LauncherContext context){
 		modules.stream().forEach(it->{
-			it.postInit(injector);
+			it.postInit(context);
 		});
 	}
 	
@@ -97,13 +97,13 @@ public class Launcher {
 		return currentApplication;
 	}
 	
-	private void postInitApplication(LauncherContext context,Injector injector,IApplication application){
-		injector.injectMembers(application);
-		application.postInit(injector);
+	private void postInitApplication(LauncherContext context,IApplication application){
+		context.getInjector().injectMembers(application);
+		application.postInit(context);
 	}
 	
 	public IApplication start() throws Throwable{
-		LauncherContext context=new LauncherContext();
+		LauncherContext context=new LauncherContext(arguments);
 		context.setCurrentApplicationConfig(getApplicationConfig());
 
 		log.info("Loading modules...");
@@ -113,17 +113,18 @@ public class Launcher {
 		currentApplication=loadApplication(context);
 	
 		Injector injector=Guice.createInjector(context.getGuiceModules());
+		context.setInjector(injector);
 		
 		log.info("Injecting in modules...");
 		injectModuleMembers(injector);
 		
 		//all modules should be initiated
 		log.info("Initializing modules...");
-		postInitModules(injector);
+		postInitModules(context);
 		
 		//not all applications initiated, only configured ones
 		log.info("Initializing application...");
-		postInitApplication(context,injector,currentApplication);
+		postInitApplication(context,currentApplication);
 
 		log.info("Running the application...");
 		currentApplication.run();

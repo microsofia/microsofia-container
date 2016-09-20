@@ -3,6 +3,7 @@ package microsofia.container;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.inject.Injector;
 import com.google.inject.Module;
 
 import microsofia.container.application.ApplicationConfig;
@@ -11,13 +12,20 @@ import microsofia.container.application.IApplication;
 import microsofia.container.module.IModule;
 
 public class LauncherContext {
+	private String[] arguments;
 	private List<Module> guiceModules;
 	private List<IModule> containerModules;
 	private IApplication application;
 	private ApplicationConfig applicationConfig;
+	private Injector injector;
 	
-	public LauncherContext(){
+	public LauncherContext(String[] arguments){
+		this.arguments=arguments;
 		guiceModules=new ArrayList<Module>();
+	}
+	
+	public String[] getArguments() {
+		return arguments;
 	}
 
 	public void addGuiceModule(Module module){
@@ -54,5 +62,13 @@ public class LauncherContext {
 
 	public void setCurrentApplicationConfig(ApplicationConfig applicationConfig) {
 		this.applicationConfig = applicationConfig;
+	}
+
+	public Injector getInjector() {
+		return injector;
+	}
+
+	public void setInjector(Injector injector) {
+		this.injector = injector;
 	}
 }

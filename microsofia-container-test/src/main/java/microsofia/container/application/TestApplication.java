@@ -30,6 +30,7 @@ import microsofia.container.module.endpoint.TestEndpointModule;
 import microsofia.container.module.endpoint.TestEndpointModule.ISample1;
 import microsofia.container.module.endpoint.TestEndpointModule.ISample3;
 import microsofia.container.module.endpoint.TestEndpointModule.Sample3;
+import microsofia.container.module.property.PropertyDescriptor;
 
 public class TestApplication extends AbstractApplication{
 	private static TestApplication instance;
@@ -44,6 +45,12 @@ public class TestApplication extends AbstractApplication{
 		sd.addClientInterface(TestEndpointModule.ISample3.class);
 
 		applicationDescriptor.getEndpointsDescriptor().addDescriptor(sd);
+		
+		PropertyDescriptor pd1=new PropertyDescriptor("k3");
+		pd1.setRequired(true);
+		pd1.setNumericType();
+
+		applicationDescriptor.getPropertiesDescriptor().addPropertyDescriptor(pd1);
 	}
 
 	public Injector getInjector(){
@@ -63,8 +70,8 @@ public class TestApplication extends AbstractApplication{
 	}
 
 	@Override
-	public void postInit(Injector injector){
-		this.injector=injector;
+	public void postInit(LauncherContext context){
+		this.injector=context.getInjector();
 	}
 
 	public void run() throws Throwable{
@@ -85,6 +92,7 @@ public class TestApplication extends AbstractApplication{
 	public static TestApplication getInstance() throws Throwable{
 		if (instance==null){
 			Launcher launcher=new Launcher();
+			launcher.setArguments(new String[]{"-property:key4=0000","-property:key5=00000","-property:key6=000000"});
 			launcher.setApplicationConfig(readFrom(new FileInputStream(new File("settings.xml"))));
 			launcher.start();
 		}

@@ -65,6 +65,9 @@
 			<property name="k1" value="v1"/>
 			<property name="k2" value="v2"/>
 			<property name="k3" value="3"/>
+			<property name="k4" value="1234${key4}5678${key4}91012${key5}${key6}"/>
+			<property name="k5" value="${key5}1234${key5}${key4}${key6}"/>
+			<property name="k6" value="1234${key6}5678${key6}232323${key6}23232${key5}${key4}"/>
 		</properties>	
 		<databases>
 			<database name="db1">

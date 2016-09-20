@@ -14,7 +14,7 @@ public abstract class AbstractModule implements IModule{
 	}
 
 	@Override
-	public void postInit(Injector injector){
+	public void postInit(LauncherContext context){
 	}
 
 	@Override

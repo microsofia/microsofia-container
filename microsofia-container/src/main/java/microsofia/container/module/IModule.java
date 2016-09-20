@@ -14,7 +14,7 @@ public interface IModule {
 
 	public void preInit(LauncherContext context);
 
-	public void postInit(Injector injector);
+	public void postInit(LauncherContext context);
 
 	public void stop();
 }
