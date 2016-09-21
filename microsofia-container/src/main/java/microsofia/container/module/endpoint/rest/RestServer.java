@@ -36,12 +36,12 @@ public class RestServer extends AbstractServer<RestServerConfig>{
 	}
 
 	@Override
-	protected void internalExport(Object object) {
+	protected void internalExport(String id,Object object) {
 		dispatcher.getDispatcher().getRegistry().addSingletonResource(object);
 	}
 
 	@Override
-	protected void internalUnexport(Object object) {
+	protected void internalUnexport(String id,Object object) {
 		dispatcher.getDispatcher().getRegistry().removeRegistrations(object.getClass());//remove endpoint by class
 	}
 	

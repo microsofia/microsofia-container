@@ -23,11 +23,12 @@ import microsofia.container.application.AbstractApplication;
 import microsofia.container.application.ApplicationDescriptor;
 import microsofia.container.module.db.jpa.JPADescriptor;
 import microsofia.container.module.endpoint.EndpointDescriptor;
-import microsofia.container.module.endpoint.TestEndpointModule;
-import microsofia.container.module.endpoint.TestEndpointModule.ISample2;
-import microsofia.container.module.endpoint.TestEndpointModule.ISample3;
-import microsofia.container.module.endpoint.TestEndpointModule.Sample2;
-import microsofia.container.module.endpoint.TestEndpointModule.Sample3;
+import microsofia.container.module.endpoint.TestRestEndpointModule;
+import microsofia.container.module.endpoint.TestRMIEndpointModule;
+import microsofia.container.module.endpoint.TestRestEndpointModule.ISample2;
+import microsofia.container.module.endpoint.TestRestEndpointModule.ISample3;
+import microsofia.container.module.endpoint.TestRestEndpointModule.Sample2;
+import microsofia.container.module.endpoint.TestRestEndpointModule.Sample3;
 import microsofia.container.module.property.PropertyDescriptor;
 import microsofia.container.module.property.TestPropertyModule;
 
@@ -46,11 +47,15 @@ public class TestApplication extends AbstractApplication{
 		applicationDescriptor.getJPAsDescriptor().addDescriptor(jpa2);
 		
 		EndpointDescriptor sd=new EndpointDescriptor("rest1");
-		sd.addClientInterface(TestEndpointModule.ISample1.class);
-		sd.addClientInterface(TestEndpointModule.ISample2.class);
-		sd.addClientInterface(TestEndpointModule.ISample3.class);
-
+		sd.addClientInterface(TestRestEndpointModule.ISample1.class);
+		sd.addClientInterface(TestRestEndpointModule.ISample2.class);
+		sd.addClientInterface(TestRestEndpointModule.ISample3.class);
 		applicationDescriptor.getEndpointsDescriptor().addDescriptor(sd);
+		
+		EndpointDescriptor sd2=new EndpointDescriptor("rmi1");
+		sd2.addClientInterface(TestRMIEndpointModule.ISample.class);
+		
+		applicationDescriptor.getEndpointsDescriptor().addDescriptor(sd2);
 		
 		PropertyDescriptor pd1=new PropertyDescriptor("k3");
 		pd1.setRequired(true);

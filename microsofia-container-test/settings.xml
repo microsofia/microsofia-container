@@ -77,11 +77,11 @@
 		</properties>	
 		<databases>
 			<database name="db1">
-				<jdbcUrl>jdbc:derby:sample1;create=true</jdbcUrl>
+				<jdbcUrl>jdbc:derby:target/sample1;create=true</jdbcUrl>
 				<driverClassName>org.apache.derby.jdbc.EmbeddedDriver</driverClassName>
 			</database>
 			<database name="db2">
-				<jdbcUrl>jdbc:derby:sample2;create=true</jdbcUrl>
+				<jdbcUrl>jdbc:derby:target/sample2;create=true</jdbcUrl>
 			</database>
 		</databases>
 		<persistence>
@@ -105,6 +105,15 @@
 					<port>8080</port>
 				</server>
 			</endpoint.rest>
+			<endpoint.rmi name="rmi1">
+				<client>
+					<host>localhost</host>
+					<port>8081</port>
+				</client>
+				<server>
+					<port>8081</port>
+				</server>
+			</endpoint.rmi>
 		</endpoints>
    </application>
 </settings>

@@ -9,12 +9,11 @@ import javax.ws.rs.Produces;
 
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import microsofia.container.module.AbstractTestModule;
 
-public class TestEndpointModule extends AbstractTestModule{
+public class TestRestEndpointModule extends AbstractTestModule{
 	@Inject
 	@Client("rest1")
 	private ISample1 sample1;
@@ -29,10 +28,9 @@ public class TestEndpointModule extends AbstractTestModule{
 	@Inject
 	private Sample3 sample3;
 	
-	public TestEndpointModule(){
+	public TestRestEndpointModule(){
 	}
 	
-	@Ignore
 	@Test
 	public void testClientSample1(){
 		Assert.assertNotNull("Couldn't inject service sample1.",sample1);
@@ -45,7 +43,6 @@ public class TestEndpointModule extends AbstractTestModule{
 		Assert.assertEquals(isample2.getHelloWorld(),"Hello");
 	}
 	
-	@Ignore
 	@Test
 	public void testExportAndCall(){
 		sample3.start();

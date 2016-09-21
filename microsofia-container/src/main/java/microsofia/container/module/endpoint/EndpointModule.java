@@ -119,7 +119,7 @@ public class EndpointModule extends ResourceBasedModule<ClientImpl, EndpointConf
 								            		server=i.getClass().getSuperclass().getAnnotation(Server.class);
 								            	}
 							                	Endpoint endpoint=getEndpoint(server.value());
-												endpoint.getServer().export(i);
+												endpoint.getServer().export(getServerId(i),i);
 							                }
 							            }
 							        });
@@ -139,14 +139,24 @@ public class EndpointModule extends ResourceBasedModule<ClientImpl, EndpointConf
 					Endpoint endpoint=getEndpoint(server.value());
 					Object result=invocation.proceed();
 					if (invocation.getMethod().isAnnotationPresent(Export.class)){
-						endpoint.getServer().export(invocation.getThis());
+						endpoint.getServer().export(getServerId(invocation.getThis()), invocation.getThis());
 					}else{
-						endpoint.getServer().unexport(invocation.getThis());
+						endpoint.getServer().unexport(getServerId(invocation.getThis()),invocation.getThis());
 					}
 					return result;
 				}
 			});
 		}
+	}
+	
+	protected String getServerId(Object object){
+		for (Class<?> i : object.getClass().getInterfaces()){
+			Id id=i.getAnnotation(Id.class);
+			if (id!=null){
+				return id.value();
+			}
+		}
+		return null;
 	}
 
 	protected class ClientProvider implements Provider<Object>{
