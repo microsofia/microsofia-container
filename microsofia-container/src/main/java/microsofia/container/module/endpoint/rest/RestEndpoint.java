@@ -6,7 +6,7 @@ public class RestEndpoint extends Endpoint<RestEndpointConfig>{
 
 	public RestEndpoint(RestEndpointConfig config){
 		super(config);
-		client=new RestClient();
-		server=new RestServer();
+		client=new RestClient(config.getClientConfig());
+		server=new RestServer(config.getServerConfig());
 	}
 }

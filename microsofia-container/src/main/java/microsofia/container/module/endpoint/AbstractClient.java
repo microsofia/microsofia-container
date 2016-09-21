@@ -1,9 +1,11 @@
 package microsofia.container.module.endpoint;
 
-public abstract class AbstractClient implements IClient{
+public abstract class AbstractClient<C extends ClientConfig> implements IClient{
 	protected boolean started;
+	protected C clientConfig;
 
-	protected AbstractClient(){
+	protected AbstractClient(C clientConfig){
+		this.clientConfig=clientConfig;
 	}
 	
 	@Override

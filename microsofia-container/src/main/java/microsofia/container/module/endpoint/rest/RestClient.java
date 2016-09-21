@@ -6,11 +6,12 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 import microsofia.container.module.endpoint.AbstractClient;
 
-public class RestClient extends AbstractClient{
+public class RestClient extends AbstractClient<RestClientConfig>{
 	protected ResteasyClient client;
 	protected ResteasyWebTarget target;
 
-	public RestClient(){
+	public RestClient(RestClientConfig c){
+		super(c);
 	}
 	
 	@Override
@@ -18,7 +19,7 @@ public class RestClient extends AbstractClient{
 		ResteasyClientBuilder builder = new ResteasyClientBuilder();
         builder.connectionPoolSize(Integer.MAX_VALUE);
 		client= builder.build();
-		target = client.target("http://localhost:9998/");//TODO param all
+		target = client.target(clientConfig.getUrl());//TODO add more parameters
 	}
 	
 	@Override

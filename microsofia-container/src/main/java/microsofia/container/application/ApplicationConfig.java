@@ -94,8 +94,8 @@ public class ApplicationConfig {
 		return endpointConfigs;
 	}
 
-	public void setEndpointConfigs(List<EndpointConfig> serviceConfigs) {
-		this.endpointConfigs = serviceConfigs;
+	public void setEndpointConfigs(List<EndpointConfig> c) {
+		this.endpointConfigs = c;
 	}
 
 	public String toString(){

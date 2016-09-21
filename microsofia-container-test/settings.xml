@@ -97,7 +97,14 @@
 			</persistence-unit>
 		</persistence>
 		<endpoints>
-			<endpoint.rest name="rest1"/>
+			<endpoint.rest name="rest1">
+				<client>
+					<url>http://localhost:8080</url>
+				</client>
+				<server>
+					<port>8080</port>
+				</server>
+			</endpoint.rest>
 		</endpoints>
    </application>
 </settings>
