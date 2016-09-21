@@ -10,7 +10,7 @@ import microsofia.container.module.endpoint.TestEndpointModule;
 import microsofia.container.module.property.TestPropertyModule;
 
 @RunWith(Suite.class)
-@SuiteClasses({TestPropertyModule.class,TestJDBCModule.class,TestJPAModule.class,TestEndpointModule.class})
+@SuiteClasses({TestEndpointModule.class,TestPropertyModule.class,TestJDBCModule.class,TestJPAModule.class})
 public class AllTest {
 
 }

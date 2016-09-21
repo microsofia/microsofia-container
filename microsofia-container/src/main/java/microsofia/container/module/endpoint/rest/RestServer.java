@@ -6,6 +6,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 
 import microsofia.container.module.endpoint.AbstractServer;
+import microsofia.container.module.endpoint.EndpointException;
 
 public class RestServer extends AbstractServer{
 	protected Server server;
@@ -26,16 +27,20 @@ public class RestServer extends AbstractServer{
 		try {
 			server.start();
 		} catch (Exception e) {
-			// TODO 
-			e.printStackTrace();
+			throw new EndpointException(e.getMessage(),e);
 		}			
 	}
 
 	@Override
 	protected void internalExport(Object object) {
-		dispatcher.getDispatcher().getRegistry().addSingletonResource(object);;
+		dispatcher.getDispatcher().getRegistry().addSingletonResource(object);
 	}
 
+	@Override
+	protected void internalUnexport(Object object) {
+		dispatcher.getDispatcher().getRegistry().removeRegistrations(object.getClass());//remove endpoint by class
+	}
+	
 	@Override
 	protected void internalClose() {
 		server.destroy();

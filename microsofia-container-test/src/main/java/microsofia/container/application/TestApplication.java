@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,21 +15,21 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Binder;
 import com.google.inject.Injector;
-import com.google.inject.Module;
 
 import microsofia.container.Launcher;
 import microsofia.container.LauncherContext;
 import microsofia.container.application.AbstractApplication;
 import microsofia.container.application.ApplicationDescriptor;
-import microsofia.container.module.endpoint.IEndpointModule;
+import microsofia.container.module.db.jpa.JPADescriptor;
 import microsofia.container.module.endpoint.EndpointDescriptor;
 import microsofia.container.module.endpoint.TestEndpointModule;
-import microsofia.container.module.endpoint.TestEndpointModule.ISample1;
+import microsofia.container.module.endpoint.TestEndpointModule.ISample2;
 import microsofia.container.module.endpoint.TestEndpointModule.ISample3;
+import microsofia.container.module.endpoint.TestEndpointModule.Sample2;
 import microsofia.container.module.endpoint.TestEndpointModule.Sample3;
 import microsofia.container.module.property.PropertyDescriptor;
+import microsofia.container.module.property.TestPropertyModule;
 
 public class TestApplication extends AbstractApplication{
 	private static TestApplication instance;
@@ -39,6 +38,13 @@ public class TestApplication extends AbstractApplication{
 	public TestApplication(){
 		applicationDescriptor=new ApplicationDescriptor();
 		applicationDescriptor.setType("testapp");
+
+		JPADescriptor jpa1=new JPADescriptor("jpa1");
+		applicationDescriptor.getJPAsDescriptor().addDescriptor(jpa1);
+		
+		JPADescriptor jpa2=new JPADescriptor("jpa2");
+		applicationDescriptor.getJPAsDescriptor().addDescriptor(jpa2);
+		
 		EndpointDescriptor sd=new EndpointDescriptor("rest1");
 		sd.addClientInterface(TestEndpointModule.ISample1.class);
 		sd.addClientInterface(TestEndpointModule.ISample2.class);
@@ -49,8 +55,13 @@ public class TestApplication extends AbstractApplication{
 		PropertyDescriptor pd1=new PropertyDescriptor("k3");
 		pd1.setRequired(true);
 		pd1.setNumericType();
+		applicationDescriptor.getPropertiesDescriptor().addDescriptor(pd1);
+		
+		
+		PropertyDescriptor pd7=new PropertyDescriptor("k7");
+		pd7.setObjectType(TestPropertyModule.Configuration.class);
+		applicationDescriptor.getPropertiesDescriptor().addDescriptor(pd7);		
 
-		applicationDescriptor.getPropertiesDescriptor().addPropertyDescriptor(pd1);
 	}
 
 	public Injector getInjector(){
@@ -65,6 +76,7 @@ public class TestApplication extends AbstractApplication{
 			@Override
 			protected void configure() {
 				bind(ISample3.class).to(Sample3.class);
+				bind(ISample2.class).to(Sample2.class);
 			}
 		});
 	}

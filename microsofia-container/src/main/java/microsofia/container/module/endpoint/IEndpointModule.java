@@ -1,5 +1,8 @@
 package microsofia.container.module.endpoint;
 
 public interface IEndpointModule {
-//TODO
+
+	public IClient getClient(String endpointName);
+	
+	public IServer getServer(String endpointName);
 }

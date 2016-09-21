@@ -8,14 +8,14 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import microsofia.container.LauncherContext;
+import microsofia.container.application.ApplicationDescriptor;
 import microsofia.container.module.ResourceBasedModule;
 
 /*
- * TODO 
- * -inject XADatasource
- * -define predefined database type
+ * - TODO : inject XADatasource
+ * -TODO :define predefined database type
  */
-public class JDBCModule extends ResourceBasedModule<JDBCImpl, JDBCConfig,DataSource> implements IJDBCModule{
+public class JDBCModule extends ResourceBasedModule<JDBCImpl, JDBCConfig,DataSource, JDBCDescriptor, JDBCsDescriptor> implements IJDBCModule{
 	
 	public JDBCModule(){
 		super(DataSource.class);
@@ -36,6 +36,11 @@ public class JDBCModule extends ResourceBasedModule<JDBCImpl, JDBCConfig,DataSou
 	@Override
 	protected JDBCImpl createResourceAnnotation(String name) {
 		return new JDBCImpl(name);
+	}
+	
+	@Override
+	protected JDBCsDescriptor getResourceModuleDescriptor(ApplicationDescriptor desc) {
+		return desc.getJDBCsDescriptor();
 	}
 	
 	@Override

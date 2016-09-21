@@ -144,7 +144,7 @@ public class Launcher {
 			if (apps==null || apps.length==0){
 				throw new IllegalStateException("No application is configured to start. Please check your settings file.");
 			}
-			launcher.setApplicationConfig(apps[0]);//TODO for the moment we just launch one
+			launcher.setApplicationConfig(apps[0]);//for the moment we just launch one
 		}
 		launcher.start();
 	}

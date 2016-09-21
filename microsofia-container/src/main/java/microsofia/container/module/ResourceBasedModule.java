@@ -4,17 +4,20 @@ import java.lang.annotation.Annotation;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import com.google.inject.Key;
 import com.google.inject.Provider;
 
+import microsofia.container.ContainerException;
 import microsofia.container.LauncherContext;
+import microsofia.container.application.ApplicationDescriptor;
+import microsofia.container.module.property.PropertyException;
 
-public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extends ResourceConfig, R> extends AbstractModule{
+public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extends ResourceConfig, R, RD extends ResourceDescriptor, RMD extends ResourceModuleDescriptor<RD>> extends AbstractModule{
 	protected Class<R> resourceClass;
 	protected Map<String,C> configs;
 	protected Map<String,R> resources;
+	protected RMD moduleDescriptor;
 
 	protected ResourceBasedModule(Class<R> resourceClass) {
 		this.resourceClass=resourceClass;
@@ -31,6 +34,8 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 	
 	protected abstract List<C> getResourceConfig(LauncherContext context);
 	
+	protected abstract RMD getResourceModuleDescriptor(ApplicationDescriptor desc);
+		
 	@Override
 	public void preInit(LauncherContext context){
 		List<C> cs=getResourceConfig(context);
@@ -39,6 +44,19 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 		});
 
 		context.addGuiceModule(createGuiceModule(context));
+	}
+	
+	@Override
+	public void postInit(LauncherContext context){		
+		//checking the existence of required properties
+		moduleDescriptor=getResourceModuleDescriptor(context.getCurrentApplication().getDescriptor());
+		if (moduleDescriptor!=null){
+			moduleDescriptor.getDescriptor().values().forEach(it->{
+				if (it.isRequired() && configs.get(it.getName())==null){
+					throw new ContainerException("Resource "+it+" is required.");
+				}
+			});
+		}
 	}
 
 	protected com.google.inject.AbstractModule createGuiceModule(LauncherContext context){

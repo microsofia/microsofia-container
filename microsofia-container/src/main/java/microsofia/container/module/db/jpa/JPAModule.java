@@ -1,11 +1,9 @@
 package microsofia.container.module.db.jpa;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl;
@@ -15,11 +13,12 @@ import com.google.inject.Key;
 import com.google.inject.Provider;
 
 import microsofia.container.LauncherContext;
+import microsofia.container.application.ApplicationDescriptor;
 import microsofia.container.application.PropertyConfig;
 import microsofia.container.module.ResourceBasedModule;
 import microsofia.container.module.db.jdbc.IJDBCModule;
 
-public class JPAModule extends ResourceBasedModule<JPAImpl, JPAConfig,EntityManagerFactory> implements IJPAModule{
+public class JPAModule extends ResourceBasedModule<JPAImpl, JPAConfig,EntityManagerFactory,JPADescriptor,JPAsDescriptor> implements IJPAModule{
 	@Inject
 	private IJDBCModule jdbcModule;
 	
@@ -29,8 +28,12 @@ public class JPAModule extends ResourceBasedModule<JPAImpl, JPAConfig,EntityMana
 	
 	@Override
 	protected EntityManagerFactory createResource(String name, JPAConfig c) {
-		List<String> managedClassNames=new ArrayList<String>();//TODO use ApplicationDescriptor
-		JPAPersistenceUnitInfo unit=new JPAPersistenceUnitInfo(name, managedClassNames, PropertyConfig.toPoperties(c.getProperties()));
+		JPADescriptor desc=moduleDescriptor.getDescriptor(c.getName());
+		if (desc==null){
+			throw new JPAException("No jpa definition found for configuration "+c.getName());
+		}
+		
+		JPAPersistenceUnitInfo unit=new JPAPersistenceUnitInfo(name, desc.getEntitiesClassName(), PropertyConfig.toPoperties(c.getProperties()));
 		unit.setNonJtaDataSource(jdbcModule.getDataSource(c.getDatabasename()));
 	    //TODO implement jtaDataSource;
 		
@@ -46,6 +49,11 @@ public class JPAModule extends ResourceBasedModule<JPAImpl, JPAConfig,EntityMana
 	@Override
 	protected JPAImpl createResourceAnnotation(String name) {
 		return new JPAImpl(name);
+	}
+	
+	@Override
+	protected JPAsDescriptor getResourceModuleDescriptor(ApplicationDescriptor desc) {
+		return desc.getJPAsDescriptor();
 	}
 	
 	@Override

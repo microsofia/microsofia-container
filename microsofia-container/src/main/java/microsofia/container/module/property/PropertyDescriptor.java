@@ -1,29 +1,14 @@
 package microsofia.container.module.property;
 
-public class PropertyDescriptor {
-	public enum TYPE{CHAR, NUMERIC};
-	private String name;
-	private boolean required;
+import microsofia.container.module.ResourceDescriptor;
+
+public class PropertyDescriptor extends ResourceDescriptor{
+	public enum TYPE{CHAR, NUMERIC, OBJECT};
 	private TYPE type;
+	private Class<?> objectClass;
 	
 	public PropertyDescriptor(String name){
-		this.setName(name);
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public boolean isRequired() {
-		return required;
-	}
-
-	public void setRequired(boolean required) {
-		this.required = required;
+		super(name);
 	}
 
 	public TYPE getType() {
@@ -40,5 +25,22 @@ public class PropertyDescriptor {
 	
 	public boolean isTypeNumeric(){
 		return type==TYPE.NUMERIC;
+	}
+	
+	public boolean isTypeObject(){
+		return type==TYPE.OBJECT;
+	}
+
+	public Class<?> getObjectClass() {
+		return objectClass;
+	}
+	
+	public void setObjectType(Class<?> objectClass) {
+		this.type = TYPE.OBJECT;
+		this.objectClass=objectClass;
+	}
+	
+	public String toString(){
+		return "[TYPE:Property]"+super.toString();
 	}
 }

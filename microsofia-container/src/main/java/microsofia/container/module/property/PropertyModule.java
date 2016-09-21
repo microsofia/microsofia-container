@@ -1,5 +1,6 @@
 package microsofia.container.module.property;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -7,20 +8,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+
 import com.google.inject.Key;
 import com.google.inject.Provider;
 
 import microsofia.container.LauncherContext;
+import microsofia.container.application.ApplicationDescriptor;
 import microsofia.container.application.PropertyConfig;
 import microsofia.container.module.ResourceBasedModule;
 
-public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyConfig,String> implements IPropertyModule{
+public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyConfig,Object,PropertyDescriptor,PropertiesDescriptor> implements IPropertyModule{
 	private static final String CMDLINE_PROPERTY = "-property:";
 	private Map<String,String> cmdLineProperties;
+	private Map<Class<?>,JAXBContext> contexts;
+	private PropertiesDescriptor propertiesDescriptor;
 
 	public PropertyModule(){
-		super(String.class);
+		super(Object.class);
 		cmdLineProperties=new HashMap<String, String>();
+		contexts=new HashMap<>();
 	}
 	
 	@Override
@@ -44,30 +52,42 @@ public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyCo
 	}
 	
 	@Override
-	public void postInit(LauncherContext context){		
-		//checking the existence of required properties
-		PropertiesDescriptor propertiesDescriptor=context.getCurrentApplication().getDescriptor().getPropertiesDescriptor();
-		if (propertiesDescriptor!=null){
-			propertiesDescriptor.getPropertiesDescriptor().values().forEach(it->{
-				if (it.isRequired() && configs.get(it.getName())==null){
-					throw new RuntimeException("Property "+it.getName()+" is required.");//TODO collect in context
+	protected List<PropertyConfig> getResourceConfig(LauncherContext context) {
+		return context.getCurrentApplicationConfig().getProperties();
+	}
+	
+
+	@Override
+	protected PropertiesDescriptor getResourceModuleDescriptor(ApplicationDescriptor desc) {
+		return desc.getPropertiesDescriptor();
+	}
+
+	@Override
+	protected Object createResource(String name, PropertyConfig c) {
+		PropertyDescriptor desc=propertiesDescriptor.getDescriptor(c.getName());
+		if (desc!=null && desc.isTypeObject()){
+			if (c.getElement()==null){
+				return null;
+			}
+			try{
+				JAXBContext context=contexts.get(desc.getObjectClass());
+				if (context==null){
+					context=JAXBContext.newInstance(desc.getObjectClass());
+					contexts.put(desc.getObjectClass(), context);
 				}
-			});
+				Unmarshaller unm=context.createUnmarshaller();//TODO do string replacement within the complex object
+				return unm.unmarshal(c.getElement());
+			} catch (Exception e) {
+				throw new PropertyException(e.getMessage(), e);
+			}
+			
+		}else{
+			return replaceProperties(c.getValue());
 		}
 	}
 	
 	@Override
-	protected List<PropertyConfig> getResourceConfig(LauncherContext context) {
-		return context.getCurrentApplicationConfig().getProperties();
-	}
-
-	@Override
-	protected String createResource(String name, PropertyConfig c) {
-		return replaceProperties(c.getValue());
-	}
-	
-	@Override
-	protected void stop(String resource){		
+	protected void stop(Object resource){		
 	}
 
 	@Override
@@ -81,7 +101,16 @@ public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyCo
 	}	
 	
 	@Override
-	public String getProperty(String name){
+	public String getStringProperty(String name){
+		Object obj=getResource(name);
+		if (obj==null){
+			return null;
+		}
+		return obj.toString();
+	}
+	
+	@Override
+	public Object getObjectProperty(String name){
 		return getResource(name);
 	}
 	
@@ -116,14 +145,19 @@ public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyCo
 			super(context);
 		}
 		
+		@SuppressWarnings("unchecked")
 		@Override
 		protected void configure(){
 			bind(IPropertyModule.class).toInstance(PropertyModule.this);
-			super.configure();
 
-			PropertiesDescriptor propertiesDescriptor=context.getCurrentApplication().getDescriptor().getPropertiesDescriptor();
+			//we dont call super as resources are of type Object or String
+			configs.entrySet().forEach(it->{
+				bind(Key.get(String.class,(Annotation)createResourceAnnotation(it.getKey()))).toProvider(new StringPropertyProvider(it.getKey()));
+			});
+
+			propertiesDescriptor=context.getCurrentApplication().getDescriptor().getPropertiesDescriptor();
 			if (propertiesDescriptor!=null){
-				propertiesDescriptor.getPropertiesDescriptor().values().forEach(it->{
+				propertiesDescriptor.getDescriptor().values().forEach(it->{
 					if (it.isTypeNumeric()){
 						bind(Key.get(Integer.class,new PropertyImpl(it.getName()))).toProvider(new NumericPropertyProvider<Integer>(it.getName(),Integer.class));
 						bind(Key.get(BigDecimal.class,new PropertyImpl(it.getName()))).toProvider(new NumericPropertyProvider<BigDecimal>(it.getName(),BigDecimal.class));
@@ -133,6 +167,9 @@ public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyCo
 						bind(Key.get(Float.class,new PropertyImpl(it.getName()))).toProvider(new NumericPropertyProvider<Float>(it.getName(),Float.class));
 						bind(Key.get(Long.class,new PropertyImpl(it.getName()))).toProvider(new NumericPropertyProvider<Long>(it.getName(),Long.class));
 						bind(Key.get(Short.class,new PropertyImpl(it.getName()))).toProvider(new NumericPropertyProvider<Short>(it.getName(),Short.class));
+						
+					}else if (it.isTypeObject()){
+						bind(Key.get((Class<Object>)it.getObjectClass(),new PropertyImpl(it.getName()))).toProvider(new ObjectPropertyProvider(it.getName()));
 					}
 				});
 			}			
@@ -148,19 +185,43 @@ public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyCo
 			try {
 				cons=c.getConstructor(String.class);
 			} catch (Exception e) {
-				e.printStackTrace();//TODO
+				throw new PropertyException(e.getMessage(), e);
 			} 
 		}
 		
 		@Override
 		public N get() {
 			try {
-				return cons.newInstance(getProperty(name));
+				return cons.newInstance(getStringProperty(name));
 			} catch (Exception e) {
-				// TODO throw PropertyException
-				e.printStackTrace();
-				throw new RuntimeException(e.getMessage(), e);
+				throw new PropertyException(e.getMessage(), e);
 			} 
+		}		
+	}
+	
+	protected class ObjectPropertyProvider implements Provider<Object>{
+		private String name;
+		
+		ObjectPropertyProvider(String name){
+			this.name=name;
+		}
+		
+		@Override
+		public Object get() {
+			return getObjectProperty(name); 
+		}		
+	}
+	
+	protected class StringPropertyProvider implements Provider<String>{
+		private String name;
+		
+		StringPropertyProvider(String name){
+			this.name=name;
+		}
+		
+		@Override
+		public String get() {
+			return getStringProperty(name); 
 		}		
 	}
 }
