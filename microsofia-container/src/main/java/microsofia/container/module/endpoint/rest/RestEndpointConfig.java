@@ -9,7 +9,7 @@ import microsofia.container.module.endpoint.EndpointConfig;
 
 @XmlRootElement(name="endpoint.rest")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RestEndpointConfig extends EndpointConfig{
+public class RestEndpointConfig extends EndpointConfig<RestClientConfig,RestServerConfig>{
 	@XmlElement(name="client")
 	private RestClientConfig clientConfig;
 	@XmlElement(name="server")

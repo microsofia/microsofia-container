@@ -16,6 +16,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>microsofia</groupId>
+			<artifactId>microsofia-rmi</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>

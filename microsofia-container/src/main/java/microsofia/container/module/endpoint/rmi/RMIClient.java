@@ -34,5 +34,5 @@ public class RMIClient extends AbstractClient<RMIClientConfig>{
 
 	@Override
 	protected void internalClose() {
-	}
+	}//TODO norlam?
 }

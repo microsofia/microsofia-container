@@ -114,6 +114,24 @@
 					<port>8081</port>
 				</server>
 			</endpoint.rmi>
+			<endpoint.msofiarmi name="msofiarmi1">
+				<client>
+					<remoteHost>localhost</remoteHost>
+					<remotePort>9998</remotePort>
+				</client>
+				<server>
+					<host>localhost</host>
+					<port>9999</port>
+				</server>
+			</endpoint.msofiarmi>
+			<endpoint.msofiarmi name="msofiarmi2">
+				<client>
+				</client>
+				<server>
+					<host>localhost</host>
+					<port>9998</port>
+				</server>
+			</endpoint.msofiarmi>
 		</endpoints>
    </application>
 </settings>

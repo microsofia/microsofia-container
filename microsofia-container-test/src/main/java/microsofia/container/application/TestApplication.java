@@ -23,6 +23,8 @@ import microsofia.container.application.AbstractApplication;
 import microsofia.container.application.ApplicationDescriptor;
 import microsofia.container.module.db.jpa.JPADescriptor;
 import microsofia.container.module.endpoint.EndpointDescriptor;
+import microsofia.container.module.endpoint.TestMSofiaRMIEndpointModule;
+import microsofia.container.module.endpoint.TestMSofiaRMIEndpointModule.Sample;
 import microsofia.container.module.endpoint.TestRestEndpointModule;
 import microsofia.container.module.endpoint.TestRMIEndpointModule;
 import microsofia.container.module.endpoint.TestRestEndpointModule.ISample2;
@@ -34,6 +36,7 @@ import microsofia.container.module.property.TestPropertyModule;
 
 public class TestApplication extends AbstractApplication{
 	private static TestApplication instance;
+	private static boolean fromUnitTest;
 	private Injector injector;
 
 	public TestApplication(){
@@ -53,9 +56,17 @@ public class TestApplication extends AbstractApplication{
 		applicationDescriptor.getEndpointsDescriptor().addDescriptor(sd);
 		
 		EndpointDescriptor sd2=new EndpointDescriptor("rmi1");
-		sd2.addClientInterface(TestRMIEndpointModule.ISample.class);
-		
+		sd2.addClientInterface(TestRMIEndpointModule.ISample.class);		
 		applicationDescriptor.getEndpointsDescriptor().addDescriptor(sd2);
+		
+		EndpointDescriptor sd3=new EndpointDescriptor("msofiarmi1");
+		sd3.addClientInterface(TestMSofiaRMIEndpointModule.ISample.class);		
+		sd3.addClientInterface(TestMSofiaRMIEndpointModule.ISample2.class);		
+		applicationDescriptor.getEndpointsDescriptor().addDescriptor(sd3);
+		
+		EndpointDescriptor sd4=new EndpointDescriptor("msofiarmi2");
+		sd4.addClientInterface(TestMSofiaRMIEndpointModule.ISample2.class);		
+		applicationDescriptor.getEndpointsDescriptor().addDescriptor(sd4);
 		
 		PropertyDescriptor pd1=new PropertyDescriptor("k3");
 		pd1.setRequired(true);
@@ -66,7 +77,6 @@ public class TestApplication extends AbstractApplication{
 		PropertyDescriptor pd7=new PropertyDescriptor("k7");
 		pd7.setObjectType(TestPropertyModule.Configuration.class);
 		applicationDescriptor.getPropertiesDescriptor().addDescriptor(pd7);		
-
 	}
 
 	public Injector getInjector(){
@@ -92,22 +102,24 @@ public class TestApplication extends AbstractApplication{
 	}
 
 	public void run() throws Throwable{
-		Computer computer=new Computer();
-		JUnitCore core=new JUnitCore();
-		core.addListener(new TextListener(System.out));
-		Result result=core.run(computer,AllTest.class);
-
-		if (result.getFailureCount()>0){
-			System.out.println("It failed!!!!!!!!!!!!!!!!!!");
-			result.getFailures().forEach(it->{it.getException().printStackTrace();});
-		}else{
-			System.out.println("SUCCESS");
-		}
-		
+		if (!fromUnitTest){
+			Computer computer=new Computer();
+			JUnitCore core=new JUnitCore();
+			core.addListener(new TextListener(System.out));
+			Result result=core.run(computer,AllTest.class);
+	
+			if (result.getFailureCount()>0){
+				System.out.println("It failed!!!!!!!!!!!!!!!!!!");
+				result.getFailures().forEach(it->{it.getException().printStackTrace();});
+			}else{
+				System.out.println("SUCCESS");
+			}
+		}	
 	}
 	
 	public static TestApplication getInstance() throws Throwable{
 		if (instance==null){
+			fromUnitTest=true;
 			Launcher launcher=new Launcher();
 			launcher.setArguments(new String[]{"-property:key4=0000","-property:key5=00000","-property:key6=000000"});
 			launcher.setApplicationConfig(readFrom(new FileInputStream(new File("settings.xml"))));

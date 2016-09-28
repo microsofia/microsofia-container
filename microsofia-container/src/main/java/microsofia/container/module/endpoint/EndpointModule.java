@@ -109,17 +109,12 @@ public class EndpointModule extends ResourceBasedModule<ClientImpl, EndpointConf
 							        typeEncounter.register(new InjectionListener<I>() {
 							            @Override
 							            public void afterInjection(Object i) {
-							                Export export=i.getClass().getAnnotation(Export.class);
-							                if (export==null && i.getClass().getSuperclass()!=null){
-							                	export=i.getClass().getSuperclass().getAnnotation(Export.class);
-							                }
+							                Export export=ClassUtils.getAnnotationOnClass(i.getClass(),Export.class);
 							                if (export!=null){
-								            	Server server=i.getClass().getAnnotation(Server.class);
-								            	if (server==null){
-								            		server=i.getClass().getSuperclass().getAnnotation(Server.class);
-								            	}
+								            	Server server=ClassUtils.getAnnotationOnClass(i.getClass(),Server.class);
 							                	Endpoint endpoint=getEndpoint(server.value());
-												endpoint.getServer().export(getServerId(i),i);
+							                	Class<?>[] interf=ClassUtils.getInterfacesWithAnnotation(i.getClass(), Server.class);
+												endpoint.getServer().export(getServerId(i),i,interf);
 							                }
 							            }
 							        });
@@ -129,17 +124,15 @@ public class EndpointModule extends ResourceBasedModule<ClientImpl, EndpointConf
 
 			bindInterceptor(Matchers.annotatedWith(Server.class), Matchers.annotatedWith(Export.class).or(Matchers.annotatedWith(Unexport.class)), new MethodInterceptor() {
 				public Object invoke(MethodInvocation invocation) throws Throwable {
-					Server server=invocation.getThis().getClass().getAnnotation(Server.class);
-					if (server==null){
-						server=invocation.getThis().getClass().getSuperclass().getAnnotation(Server.class);
-					}
+					Server server=ClassUtils.getAnnotationOnClass(invocation.getThis().getClass(), Server.class);
 					if (server==null){
 						throw new EndpointException("Annotation "+Server.class+" couldnt be read from class "+invocation.getThis().getClass().getSuperclass());
 					}
 					Endpoint endpoint=getEndpoint(server.value());
 					Object result=invocation.proceed();
 					if (invocation.getMethod().isAnnotationPresent(Export.class)){
-						endpoint.getServer().export(getServerId(invocation.getThis()), invocation.getThis());
+						Class<?>[] interf=ClassUtils.getInterfacesWithAnnotation(invocation.getThis().getClass(), Server.class);
+						endpoint.getServer().export(getServerId(invocation.getThis()), invocation.getThis(),interf);
 					}else{
 						endpoint.getServer().unexport(getServerId(invocation.getThis()),invocation.getThis());
 					}
@@ -150,11 +143,9 @@ public class EndpointModule extends ResourceBasedModule<ClientImpl, EndpointConf
 	}
 	
 	protected String getServerId(Object object){
-		for (Class<?> i : object.getClass().getInterfaces()){
-			Id id=i.getAnnotation(Id.class);
-			if (id!=null){
-				return id.value();
-			}
+		Id id=ClassUtils.getAnnotationOnInterface(object.getClass(), Id.class);
+		if (id!=null){
+			return id.value();
 		}
 		return null;
 	}

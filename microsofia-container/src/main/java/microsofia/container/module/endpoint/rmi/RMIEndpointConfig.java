@@ -6,12 +6,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import microsofia.container.module.endpoint.EndpointConfig;
-import microsofia.container.module.endpoint.rest.RestClientConfig;
-import microsofia.container.module.endpoint.rest.RestServerConfig;
 
 @XmlRootElement(name="endpoint.rmi")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class RMIEndpointConfig extends EndpointConfig{
+public class RMIEndpointConfig extends EndpointConfig<RMIClientConfig,RMIServerConfig>{
 	@XmlElement(name="client")
 	private RMIClientConfig clientConfig;
 	@XmlElement(name="server")

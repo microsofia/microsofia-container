@@ -1,6 +1,5 @@
 package microsofia.container.module.endpoint.rmi;
 
-import java.rmi.NoSuchObjectException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -46,7 +45,7 @@ public class RMIServer extends AbstractServer<RMIServerConfig>{
 	}
 
 	@Override
-	protected void internalExport(String id,Object object) {
+	protected void internalExport(String id,Object object,Class<?>[] interfaces) {
 		try {
 			UnicastRemoteObject.exportObject((Remote)object, serverConfig.getPort());
 			registry.rebind(getServerId(id, object), (Remote)object);
@@ -66,6 +65,6 @@ public class RMIServer extends AbstractServer<RMIServerConfig>{
 	}
 	
 	@Override
-	protected void internalClose() {//nothing to do
+	protected void internalClose() {//nothing to do //TODO norlam?
 	}
 }

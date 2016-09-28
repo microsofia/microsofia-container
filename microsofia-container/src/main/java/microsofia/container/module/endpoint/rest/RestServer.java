@@ -36,7 +36,7 @@ public class RestServer extends AbstractServer<RestServerConfig>{
 	}
 
 	@Override
-	protected void internalExport(String id,Object object) {
+	protected void internalExport(String id,Object object,Class<?>[] interfaces) {
 		dispatcher.getDispatcher().getRegistry().addSingletonResource(object);
 	}
 

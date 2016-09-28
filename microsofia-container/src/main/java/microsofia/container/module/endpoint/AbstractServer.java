@@ -15,7 +15,7 @@ public abstract class AbstractServer<S extends ServerConfig> implements IServer{
 	}
 	
 	@Override
-	public void export(String id,Object object){
+	public void export(String id,Object object,Class<?>[] interfaces){
 		if (exportedObjects.containsKey(object)){
 			return;//no need to export it twice
 		}
@@ -25,7 +25,7 @@ public abstract class AbstractServer<S extends ServerConfig> implements IServer{
 				started=true;
 			}
 		}
-		internalExport(id,object);
+		internalExport(id,object,interfaces);
 		exportedObjects.put(object, object);
 	}
 	
@@ -50,7 +50,7 @@ public abstract class AbstractServer<S extends ServerConfig> implements IServer{
 	
 	protected abstract void internalStart();
 
-	protected abstract void internalExport(String id,Object object);
+	protected abstract void internalExport(String id,Object object,Class<?>[] interfaces);
 
 	protected abstract void internalUnexport(String id,Object object);
 	
