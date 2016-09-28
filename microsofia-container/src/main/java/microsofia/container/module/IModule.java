@@ -5,7 +5,6 @@ import microsofia.container.LauncherContext;
 /*
  * -TODO : inject JMS
  * -TODO : inject service: RMI ++ (netty)
- * -TODO : inject ...
  * 
  * - TODO : have utilities injection, like ILifecycle interface, etc
  * */

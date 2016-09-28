@@ -11,7 +11,6 @@ import com.google.inject.Provider;
 import microsofia.container.ContainerException;
 import microsofia.container.LauncherContext;
 import microsofia.container.application.ApplicationDescriptor;
-import microsofia.container.module.property.PropertyException;
 
 public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extends ResourceConfig, R, RD extends ResourceDescriptor, RMD extends ResourceModuleDescriptor<RD>> extends AbstractModule{
 	protected Class<R> resourceClass;

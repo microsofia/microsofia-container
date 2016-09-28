@@ -24,7 +24,6 @@ import microsofia.container.application.ApplicationDescriptor;
 import microsofia.container.module.db.jpa.JPADescriptor;
 import microsofia.container.module.endpoint.EndpointDescriptor;
 import microsofia.container.module.endpoint.TestMSofiaRMIEndpointModule;
-import microsofia.container.module.endpoint.TestMSofiaRMIEndpointModule.Sample;
 import microsofia.container.module.endpoint.TestRestEndpointModule;
 import microsofia.container.module.endpoint.TestRMIEndpointModule;
 import microsofia.container.module.endpoint.TestRestEndpointModule.ISample2;

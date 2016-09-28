@@ -6,11 +6,8 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import microsofia.container.application.TestApplication;
 import microsofia.container.module.AbstractTestModule;
 
 public class TestJDBCModule extends AbstractTestModule{
