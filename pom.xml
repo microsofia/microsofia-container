@@ -10,7 +10,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>microsofia-container</module>
+		<module>microsofia-container-api</module>
+		<module>microsofia-container-impl</module>
 		<module>microsofia-container-test</module>
 	</modules>
 
@@ -36,7 +37,17 @@
 		<dependencies>
 			<dependency>
 				<groupId>microsofia-container</groupId>
-				<artifactId>microsofia-container</artifactId>
+				<artifactId>microsofia-container-api</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>microsofia-container</groupId>
+				<artifactId>microsofia-container-impl</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>microsofia-container</groupId>
+				<artifactId>microsofia-container-test</artifactId>
 				<version>1.0</version>
 			</dependency>
 			<dependency>

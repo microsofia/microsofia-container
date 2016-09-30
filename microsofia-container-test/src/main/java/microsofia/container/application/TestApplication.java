@@ -17,8 +17,8 @@ import org.junit.runner.Result;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 
-import microsofia.container.Launcher;
-import microsofia.container.LauncherContext;
+import microsofia.container.ContainerBuilder;
+import microsofia.container.InitializationContext;
 import microsofia.container.application.AbstractApplication;
 import microsofia.container.application.ApplicationDescriptor;
 import microsofia.container.module.db.jpa.JPADescriptor;
@@ -83,7 +83,7 @@ public class TestApplication extends AbstractApplication{
 	}
 	
 	@Override
-	public void preInit(LauncherContext context) {
+	public void preInit(InitializationContext context) {
 		instance=this;
 		context.addGuiceModule(new AbstractModule() {
 			
@@ -96,7 +96,7 @@ public class TestApplication extends AbstractApplication{
 	}
 
 	@Override
-	public void postInit(LauncherContext context){
+	public void postInit(InitializationContext context){
 		this.injector=context.getInjector();
 	}
 
@@ -119,10 +119,10 @@ public class TestApplication extends AbstractApplication{
 	public static TestApplication getInstance() throws Throwable{
 		if (instance==null){
 			fromUnitTest=true;
-			Launcher launcher=new Launcher();
-			launcher.setArguments(new String[]{"-property:key4=0000","-property:key5=00000","-property:key6=000000"});
-			launcher.setApplicationConfig(readFrom(new FileInputStream(new File("settings.xml"))));
-			launcher.start();
+			ContainerBuilder builder=new ContainerBuilder();
+			builder.arguments(new String[]{"-property:key4=0000","-property:key5=00000","-property:key6=000000"});
+			builder.applicationConfig(readFrom(new FileInputStream(new File("settings.xml"))));
+			builder.build().start();
 		}
 		return instance;
 	}	
