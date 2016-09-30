@@ -5,7 +5,7 @@ import org.w3c.dom.Element;
 import microsofia.container.application.ApplicationConfig;
 
 /**
- * An instance of microsofia-container.<br>
+ * An instance of microsofia container.
  * 
  * */
 public abstract class Container {
@@ -16,7 +16,7 @@ public abstract class Container {
 	}
 
 	/**
-	 * The arguments used to run the container.
+	 * The cmd line arguments used to run the container.
 	 * 
 	 * @return arguments used to run the container
 	 * */
@@ -34,13 +34,13 @@ public abstract class Container {
 	}
 
 	/**
-	 * Starting the container.
+	 * Starts the container.
 	 * 
 	 * */
 	public abstract void start() throws Throwable;
 
 	/**
-	 * Stoping the container.
+	 * Stops the container and frees any resources it is currently using.
 	 * 
 	 * */
 	public abstract void stop();

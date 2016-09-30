@@ -22,6 +22,97 @@ import microsofia.container.module.db.jdbc.JDBCConfig;
 import microsofia.container.module.db.jpa.JPAConfig;
 import microsofia.container.module.endpoint.EndpointConfig;
 
+/**
+ * Application configuration used to configure the container at startup.<br/>
+ * The container has several available types of applications that are accessible via its classpath at runtime.
+ * Only the application which type is specified in the configuration will be started. 
+ * Typically the configuration is read from the microsofia-boot settings file. <br/>
+ * <br/>
+ * Example:
+ <pre>
+	&ltsettings>
+	   ...
+	
+	   &ltapplication name="test" type="testapp">
+			&ltproperties>
+				&ltproperty name="k1" value="v1"/>
+				&ltproperty name="k2" value="v2"/>
+				&ltproperty name="k3" value="3"/>
+				&ltproperty name="k4" value="1234${key4}5678${key4}91012${key5}${key6}"/>
+				&ltproperty name="k5" value="${key5}1234${key5}${key4}${key6}"/>
+				&ltproperty name="k6" value="1234${key6}5678${key6}232323${key6}23232${key5}${key4}"/>
+				&ltproperty name="k7">
+					&ltconfig>
+						&ltf1>f1&lt/f1>
+						&ltf2>f2&lt/f2>
+					&lt/config>
+				&lt/property>
+			&lt/properties>	
+			&ltdatabases>
+				&ltdatabase name="db1">
+					&ltjdbcUrl>jdbc:derby:target/sample1;create=true&lt/jdbcUrl>
+					&ltdriverClassName>org.apache.derby.jdbc.EmbeddedDriver&lt/driverClassName>
+				&lt/database>
+				&ltdatabase name="db2">
+					&ltjdbcUrl>jdbc:derby:target/sample2;create=true&lt/jdbcUrl>
+				</database>
+			&lt/databases>
+			&ltpersistence>
+				&ltpersistence-unit name="jpa1" databasename="db1">
+					&ltproperties>
+						&lt!--  property name="" value=""/ -->
+					&lt/properties>				
+				&lt/persistence-unit>
+				&ltpersistence-unit name="jpa2" databasename="db1">
+					&ltproperties>
+						&lt!--  property name="" value=""/ -->
+					&lt/properties>				
+				&lt/persistence-unit>
+			&lt/persistence>
+			&ltendpoints>
+				&ltendpoint.rest name="rest1">
+					&ltclient>
+						&lturl>http://localhost:8080&lt/url>
+					&lt/client>
+					&ltserver>
+						&ltport>8080&lt/port>
+					&lt/server>
+				&lt/endpoint.rest>
+				&ltendpoint.rmi name="rmi1">
+					&ltclient>
+						&lthost>localhost&lt/host>
+						&ltport>8081&lt/port>
+					&lt/client>
+					&ltserver>
+						&ltport>8081&lt/port>
+					&lt/server>
+				&lt/endpoint.rmi>
+				&ltendpoint.msofiarmi name="msofiarmi1">
+					&ltclient>
+						&ltremoteHost>localhost&lt/remoteHost>
+						&ltremotePort>9998&lt/remotePort>
+					&lt/client>
+					&ltserver>
+						&lthost>localhost&lt/host>
+						&ltport>9999&lt/port>
+					&lt/server>
+				&lt/endpoint.msofiarmi>
+				&ltendpoint.msofiarmi name="msofiarmi2">
+					&ltclient>
+					&lt/client>
+					&ltserver>
+						&lthost>localhost&lt/host>
+						&ltport>9998&lt/port>
+					&lt/server>
+				&lt/endpoint.msofiarmi>
+			&lt/endpoints>
+	   &lt/application>
+	&lt/settings>
+ 
+ </pre>
+ * 
+ * 
+ * **/
 @XmlRootElement(name="application")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ApplicationConfig {
@@ -42,7 +133,6 @@ public class ApplicationConfig {
 	@XmlElementRef
 	private List<EndpointConfig> endpointConfigs;
 	
-	
 	public ApplicationConfig(){
 		properties=new ArrayList<>();
 		jdbcConfigs=new ArrayList<>();
@@ -50,58 +140,124 @@ public class ApplicationConfig {
 		endpointConfigs=new ArrayList<>();
 	}
 
+	/**
+	 * The name of the application instance which is not the same than the application type.
+	 * 
+	 * @return the application name
+	 * */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Sets the application instance name.
+	 * 
+	 * @param name the application instance name
+	 * */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Returns the application type name to instantiate and run.
+	 * 
+	 * @return the application type name to to instantiate and run.
+	 * */
 	public String getType() {
 		return type;
 	}
-
+	
+	/**
+	 * Sets the application type name
+	 * 
+	 * @param type the application type name
+	 * */
 	public void setType(String type) {
 		this.type = type;
 	}
 
+	/**
+	 * Returns the properties configuration that will be used to configure the property module.
+	 * 
+	 * @return the properties configuration
+	 * */
 	public List<PropertyConfig> getProperties() {
 		return properties;
 	}
 
+	/**
+	 * Sets the properties configuration that will be used to configure the property module.
+	 * 
+	 * @param properties the properties configuration
+	 * */
 	public void setProperties(List<PropertyConfig> properties) {
 		this.properties = properties;
 	}
 	
+	/**
+	 * Returns the jdbc configurations that will be used to configure the JDBC module.
+	 * 
+	 * @return the jdbc module configurations
+	 * */
 	public List<JDBCConfig> getJDBCConfigs() {
 		return jdbcConfigs;
 	}
 
+	/**
+	 * Sets the jdbc configurations that will be used to configure the JDBC module.
+	 * 
+	 * @param jdbcConfigs the jdbc module configuration
+	 * */
 	public void setJDBCConfigs(List<JDBCConfig> jdbcConfigs) {
 		this.jdbcConfigs = jdbcConfigs;
 	}
 
+	/**
+	 * Returns the jpa configurations that will be used to configure the JPA module.
+	 * 
+	 * @return the jpa module configuration
+	 * */
 	public List<JPAConfig> getJPAConfigs() {
 		return jpaConfigs;
 	}
 
+	/**
+	 * Sets the jpa configurations that will be used to configure the JPA module.
+	 * 
+	 * @param jpaConfigs the jpa module configuration
+	 * */
 	public void setJPAConfigs(List<JPAConfig> jpaConfigs) {
 		this.jpaConfigs = jpaConfigs;
 	}
 
+	/**
+	 * Returns the endpoint configurations that will be used to configure the endpoint module.
+	 * 
+	 * @return the endpoing module configuration
+	 * */
 	public List<EndpointConfig> getEndpointConfigs() {
 		return endpointConfigs;
 	}
 
+	/**
+	 * Sets the endpoint configuration that will be used to configure the endpoint module.
+	 * 
+	 * @param c the endpoint module configuration
+	 * */
 	public void setEndpointConfigs(List<EndpointConfig> c) {
 		this.endpointConfigs = c;
 	}
 
+	/**
+	 * String representation of the configuration.
+	 * */
 	public String toString(){
 		return "Application[Name="+name+"][Type="+type+"][Properties="+properties+"][JDBCConfigs="+jdbcConfigs+"]";
 	}
 	
+	/**
+	 * Marshalling the configuration to an output stream.
+	 */
 	public void writeTo(OutputStream out) throws Exception{
 		Marshaller marshaller=jaxbContext.createMarshaller();
 		marshaller.marshal(this, out);
@@ -116,11 +272,21 @@ public class ApplicationConfig {
 		}
 	}
 	
+	/**
+	 * Reading the configuration from an input stream.
+	 * */
 	public static ApplicationConfig readFrom(InputStream in) throws Exception{
 		Unmarshaller unmarshaller=jaxbContext.createUnmarshaller();
 		return (ApplicationConfig)unmarshaller.unmarshal(in);
 	}
 	
+	/**
+	 * Unmarshalling configuration instances from the array of Element. 
+	 * If an item of the array is null, then no instance is added in the returned array.
+	 * 
+	 * @param element array of element containing instances to unmarshal
+	 * @return instances of configurations
+	 * */
 	public static ApplicationConfig[] readFrom(Element[] element) throws Exception{
 		Unmarshaller unmarshaller=jaxbContext.createUnmarshaller();
 		List<ApplicationConfig> apps=new ArrayList<ApplicationConfig>();

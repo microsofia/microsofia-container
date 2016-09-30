@@ -2,6 +2,9 @@ package microsofia.container.module.property;
 
 import microsofia.container.ContainerException;
 
+/**
+ * Exception thrown by the property module.
+ * */
 public class PropertyException extends ContainerException {
 	private static final long serialVersionUID = 0;
 
