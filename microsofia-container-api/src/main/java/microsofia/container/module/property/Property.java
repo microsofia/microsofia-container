@@ -30,7 +30,7 @@ import com.google.inject.BindingAnnotation;
  * properties and their values. <br />
  * <br />
  * It also uses the command line arguments in order to do replacement within the
- * value of all occurences of ${key_name}.<br />
+ * value of all occurrences of ${key_name}.<br />
  * <br />
  * The value of the key_name is passed as following within the command line
  * arguments -property:key_name=value <br />
@@ -39,5 +39,9 @@ import com.google.inject.BindingAnnotation;
 @Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD }) 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Property {
+	
+	/**
+	 * The name of the property.
+	 * */
 	String value();
 }

@@ -2,6 +2,9 @@ package microsofia.container.module.endpoint;
 
 import microsofia.container.ContainerException;
 
+/**
+ * Exception thrown by the endpoint module.
+ * */
 public class EndpointException extends ContainerException {
 	private static final long serialVersionUID = 0;
 

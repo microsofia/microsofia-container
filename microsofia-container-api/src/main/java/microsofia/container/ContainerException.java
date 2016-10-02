@@ -1,7 +1,7 @@
 package microsofia.container;
 
 /**
- * Parent exception for all exceptions thrown by microsofia container.
+ * Parent class exception for all exceptions thrown by microsofia container.
  * */
 public class ContainerException extends RuntimeException{
 	private static final long serialVersionUID = 1L;

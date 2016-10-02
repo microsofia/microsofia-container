@@ -9,6 +9,10 @@ import microsofia.container.module.endpoint.msofiarmi.MSofiaRMIEndpointConfig;
 import microsofia.container.module.endpoint.rest.RestEndpointConfig;
 import microsofia.container.module.endpoint.rmi.RMIEndpointConfig;
 
+/**
+ * Parent configuration for all endpoint implementations. An endpoint configuration has a name, 
+ * a client and a server configuration.
+ * */
 @XmlSeeAlso({RestEndpointConfig.class,RMIEndpointConfig.class,MSofiaRMIEndpointConfig.class})
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class EndpointConfig<C extends ClientConfig, S extends ServerConfig> extends ResourceConfig{

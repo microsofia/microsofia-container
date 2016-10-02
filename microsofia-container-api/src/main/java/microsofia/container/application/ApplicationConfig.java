@@ -141,16 +141,16 @@ public class ApplicationConfig {
 	}
 
 	/**
-	 * The name of the application instance which is not the same than the application type.
+	 * The name of the application instance, not to confuse with the application type.
 	 * 
-	 * @return the application name
+	 * @return the application instance name
 	 * */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Sets the application instance name.
+	 * Sets the application instance name, not to confuse with the application type
 	 * 
 	 * @param name the application instance name
 	 * */
@@ -195,36 +195,36 @@ public class ApplicationConfig {
 	}
 	
 	/**
-	 * Returns the jdbc configurations that will be used to configure the JDBC module.
+	 * Returns the JDBC configurations that will be used to configure the JDBC module.
 	 * 
-	 * @return the jdbc module configurations
+	 * @return the JDBC module configurations
 	 * */
 	public List<JDBCConfig> getJDBCConfigs() {
 		return jdbcConfigs;
 	}
 
 	/**
-	 * Sets the jdbc configurations that will be used to configure the JDBC module.
+	 * Sets the JDBC configurations that will be used to configure the JDBC module.
 	 * 
-	 * @param jdbcConfigs the jdbc module configuration
+	 * @param jdbcConfigs the JDBC module configuration
 	 * */
 	public void setJDBCConfigs(List<JDBCConfig> jdbcConfigs) {
 		this.jdbcConfigs = jdbcConfigs;
 	}
 
 	/**
-	 * Returns the jpa configurations that will be used to configure the JPA module.
+	 * Returns the JPA configurations that will be used to configure the JPA module.
 	 * 
-	 * @return the jpa module configuration
+	 * @return the JPA module configuration
 	 * */
 	public List<JPAConfig> getJPAConfigs() {
 		return jpaConfigs;
 	}
 
 	/**
-	 * Sets the jpa configurations that will be used to configure the JPA module.
+	 * Sets the JPA configurations that will be used to configure the JPA module.
 	 * 
-	 * @param jpaConfigs the jpa module configuration
+	 * @param jpaConfigs the JPA module configuration
 	 * */
 	public void setJPAConfigs(List<JPAConfig> jpaConfigs) {
 		this.jpaConfigs = jpaConfigs;
@@ -233,7 +233,7 @@ public class ApplicationConfig {
 	/**
 	 * Returns the endpoint configurations that will be used to configure the endpoint module.
 	 * 
-	 * @return the endpoing module configuration
+	 * @return the endpoint module configuration
 	 * */
 	public List<EndpointConfig> getEndpointConfigs() {
 		return endpointConfigs;
@@ -256,7 +256,7 @@ public class ApplicationConfig {
 	}
 	
 	/**
-	 * Marshalling the configuration to an output stream.
+	 * Marshaling the configuration to an output stream.
 	 */
 	public void writeTo(OutputStream out) throws Exception{
 		Marshaller marshaller=jaxbContext.createMarshaller();
@@ -281,7 +281,7 @@ public class ApplicationConfig {
 	}
 	
 	/**
-	 * Unmarshalling configuration instances from the array of Element. 
+	 * Unmarshaling configuration instances from the array of Element. 
 	 * If an item of the array is null, then no instance is added in the returned array.
 	 * 
 	 * @param element array of element containing instances to unmarshal

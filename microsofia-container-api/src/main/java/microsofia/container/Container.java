@@ -5,7 +5,8 @@ import org.w3c.dom.Element;
 import microsofia.container.application.ApplicationConfig;
 
 /**
- * An instance of microsofia container.
+ * A microsofia container. When starting the container, it will load its modules and application, initialize them and 
+ * run the application. The modules offer several capabilities and are configured via the application configuration.
  * 
  * */
 public abstract class Container {
@@ -16,9 +17,9 @@ public abstract class Container {
 	}
 
 	/**
-	 * The cmd line arguments used to run the container.
+	 * The cmd line arguments used to configure the container.
 	 * 
-	 * @return arguments used to run the container
+	 * @return arguments used to configure the container
 	 * */
 	public String[] getArguments() {
 		return arguments;
@@ -34,7 +35,8 @@ public abstract class Container {
 	}
 
 	/**
-	 * Starts the container.
+	 * Starts the container. It will load all its modules and application, initialize them and then
+	 * run the application.
 	 * 
 	 * */
 	public abstract void start() throws Throwable;

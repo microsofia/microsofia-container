@@ -1,9 +1,22 @@
 package microsofia.container.module.property;
 
 /**
- * Public interface of the property module. It can be injected using the Property annotation in case
- * there is a use case where injecting the value is not enough.
- * */
+ * Public interface of the property module. It can be injected in case there is
+ * a use case where injecting the value is not enough. <br />
+ * <br />
+ * Example: <br />
+ * <pre>
+<br />
+public class Sample{<br />
+ ...
+&#64;Inject
+IPropertyModule propertyModule;   
+
+... 
+
+}
+ * </pre>
+ */
 public interface IPropertyModule {
 
 	/**
@@ -23,7 +36,7 @@ public interface IPropertyModule {
 	public Object getObjectProperty(String name);
 	
 	/**
-	 * Replaces in the given string all occurenes of ${key_name} by the value of the key_name.
+	 * Replaces in the given string all occurrences of ${key_name} by the value of the key_name.
 	 * The key_name value is provided at startup in the command line arguments with the following form 
 	 * -property:key_name=value
 	 * 

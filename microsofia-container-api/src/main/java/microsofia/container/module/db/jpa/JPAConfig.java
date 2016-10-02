@@ -12,6 +12,9 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import microsofia.container.application.PropertyConfig;
 import microsofia.container.module.ResourceConfig;
 
+/**
+ * JPA resource configuration. <br />
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class JPAConfig extends ResourceConfig{
 	@XmlAttribute
@@ -24,18 +27,30 @@ public class JPAConfig extends ResourceConfig{
 		properties=new ArrayList<PropertyConfig>();
 	}
 
+	/**
+	 * Returns the associated database.
+	 * */
 	public String getDatabasename() {
 		return databasename;
 	}
 
+	/**
+	 * Sets the associated database.
+	 * */
 	public void setDatabasename(String databasename) {
 		this.databasename = databasename;
 	}
 
+	/**
+	 * Returns the properties that will be used to configure the EntityManagerFactory/SessionFactory.
+	 * */
 	public List<PropertyConfig> getProperties() {
 		return properties;
 	}
 
+	/**
+	 * Sets the properties that will be used to configure the EntityManagerFactory/SessionFactory.
+	 * */
 	public void setProperties(List<PropertyConfig> properties) {
 		this.properties = properties;
 	}

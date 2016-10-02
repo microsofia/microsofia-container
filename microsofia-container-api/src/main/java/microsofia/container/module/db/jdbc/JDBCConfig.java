@@ -8,6 +8,13 @@ import javax.xml.bind.annotation.XmlElement;
 
 import microsofia.container.module.ResourceConfig;
 
+/**
+ * JDBC resource configuration containing needed informations to connect to a
+ * database. <br />
+ * As the implementation is based on HikariCP JDBC connection pool, most of the
+ * following configuration can be found here
+ * http://github.com/brettwooldridge/HikariCP/wiki/Configuration
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class JDBCConfig extends ResourceConfig{
 	@XmlElement

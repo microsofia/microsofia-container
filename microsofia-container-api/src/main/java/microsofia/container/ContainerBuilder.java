@@ -6,7 +6,7 @@ import java.util.ServiceLoader;
 import microsofia.container.application.ApplicationConfig;
 
 /**
- * Builder of container.
+ * Builder of a container.
  * */
 public class ContainerBuilder {
 	private String[] args;

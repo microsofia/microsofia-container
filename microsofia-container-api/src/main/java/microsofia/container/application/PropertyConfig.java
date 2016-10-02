@@ -91,7 +91,7 @@ public class PropertyConfig extends ResourceConfig{
 	}
 
 	/**
-	 * Returns a filled Properties objects. All the properties have simple values in that case.
+	 * Returns a filled Properties object. All the properties have simple values in that case.
 	 * 
 	 * @param cs the properties to read from
 	 * @return an instance of Properties containing all the passed property names with their simple values
