@@ -4,6 +4,9 @@ import java.lang.annotation.Annotation;
 
 import microsofia.container.module.ResourceAnnotation;
 
+/**
+ * Implementation of the JDBC annotation, used while configuring Guice bindings.
+ * */
 class JDBCImpl extends ResourceAnnotation implements JDBC{
 	
 	public JDBCImpl(String name){

@@ -4,6 +4,9 @@ import com.zaxxer.hikari.HikariConfig;
 
 public class Utils {
 
+	/**
+	 * Creates a {@link HikariConfig} from a JDBCConfig.
+	 * */
 	public static HikariConfig createHikariConfig(JDBCConfig jdbcConfig){
 		HikariConfig config=new HikariConfig();
 		if (jdbcConfig.getConnectionTimeout()!=null){

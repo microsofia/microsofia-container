@@ -12,42 +12,84 @@ import microsofia.container.ContainerException;
 import microsofia.container.InitializationContext;
 import microsofia.container.application.ApplicationDescriptor;
 
+/**
+ * Parent class for all modules that are resource based.
+ * */
 public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extends ResourceConfig, R, RD extends ResourceDescriptor, RMD extends ResourceModuleDescriptor<RD>> extends AbstractModule{
+	//the class type of the resource
 	protected Class<R> resourceClass;
+	//configuration of the module
 	protected Map<String,C> configs;
+	//the created resources
 	protected Map<String,R> resources;
+	//the module descriptor
 	protected RMD moduleDescriptor;
 
+	/**
+	 * Initializes internal structures and sets the class type of the managed resource.
+	 * 
+	 * @param resourceClass the type of the resource managed by the module
+	 * */
 	protected ResourceBasedModule(Class<R> resourceClass) {
 		this.resourceClass=resourceClass;
 		configs=new Hashtable<>();
 		resources=new Hashtable<>();
 	}
 	
+	/**
+	 * Stops the module and frees all resources.
+	 * */
 	@Override
 	public void stop(){
 		resources.values().forEach(this::stop);
 	}
 
+	/**
+	 * While stopping the module, this method will be called with every created resource
+	 * in order to free its content.
+	 * 
+	 * @param resource the resource to free
+	 * */
 	protected abstract void stop(R resource);
 	
+	/**
+	 * Returns the module configuration from the container initialization context.
+	 * 
+	 * @param context the initialization context
+	 * @return configuration of the module
+	 * */
 	protected abstract List<C> getResourceConfig(InitializationContext context);
 	
+	/**
+	 * Returns the module descriptor from the application descriptor.
+	 * 
+	 * @param desc the application descriptor
+	 * @return the module descriptor
+	 * */
 	protected abstract RMD getResourceModuleDescriptor(ApplicationDescriptor desc);
-		
+	
+	/**
+	 * Pre-initialization consists of loading the module configuration and creating its Guice module.
+	 * */
 	@Override
 	public void preInit(InitializationContext context){
+		//loading the configuration and putting it in a local map
 		List<C> cs=getResourceConfig(context);
 		cs.forEach(it->{
 			configs.put(it.getName(), it);
 		});
 
+		//creating and adding a Guice module
 		context.addGuiceModule(createGuiceModule(context));
 	}
-	
+
+	/**
+	 * Post-initialization consists of checking that all required resources in the module descriptor
+	 * have an actual configuration.
+	 * */
 	@Override
 	public void postInit(InitializationContext context){		
-		//checking the existence of required properties
+		//checking the existence of required resources
 		moduleDescriptor=getResourceModuleDescriptor(context.getCurrentApplication().getDescriptor());
 		if (moduleDescriptor!=null){
 			moduleDescriptor.getDescriptor().values().forEach(it->{
@@ -58,19 +100,44 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 		}
 	}
 
+	/**
+	 * Creates a Guice module
+	 * */
 	protected com.google.inject.AbstractModule createGuiceModule(InitializationContext context){
 		return new GuiceModule(context);
 	}
 
+	/**
+	 * Creates a resource instance from a name and its configuration.
+	 * 
+	 * @param name the name of the resource
+	 * @param c the configuration of the resource
+	 * @return the created resource
+	 * */
 	protected abstract R createResource(String name,C c);
 	
+	/**
+	 * Creates a resource annotation from its name
+	 * 
+	 * @param name the resource name
+	 * @return the resource annotation
+	 * */
 	protected abstract A createResourceAnnotation(String name);
 	
+	/**
+	 * Returns a resource by its name. If the resource is not already created, then
+	 * the method will create it.
+	 * 
+	 * @param name the resource name
+	 * @return the resource
+	 * */
 	public R getResource(String name){
+		//is the resource already created?
 		R resource=resources.get(name);
 		if (resource!=null){
 			return resource;
 		}
+		
 		synchronized(this){
 			resource=resources.get(name);
 			if (resource!=null){
@@ -85,6 +152,9 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 		return resource;
 	}
 	
+	/**
+	 * Default Guice module that will bind the default resouce class and annotation to a default resource provider.
+	 * */
 	protected class GuiceModule extends com.google.inject.AbstractModule{
 		protected InitializationContext context;
 
@@ -95,11 +165,15 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 		@Override
 		protected void configure(){			
 			configs.entrySet().forEach(it->{
+				//for every resource, default bindings
 				bind(Key.get(resourceClass,(Annotation)createResourceAnnotation(it.getKey()))).toProvider(new ResourceProvider(it.getKey()));
 			});
 		}
 	}
 
+	/**
+	 * Default provider that will provide the default resource type based on its name.
+	 * */
 	protected class ResourceProvider implements Provider<R>{
 		private String name;
 		private R resource;
@@ -120,8 +194,7 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 				resource=getResource(name);
 			}
 			return resource;
-		}
-		
+		}		
 	}
 }
 

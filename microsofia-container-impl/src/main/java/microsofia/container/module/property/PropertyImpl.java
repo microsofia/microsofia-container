@@ -4,6 +4,9 @@ import java.lang.annotation.Annotation;
 
 import microsofia.container.module.ResourceAnnotation;
 
+/**
+ * Implementation of the Property annotation, used while configuring Guice bindings.
+ * */
 class PropertyImpl extends ResourceAnnotation implements Property{
 	
 	public PropertyImpl(String name){

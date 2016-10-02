@@ -93,7 +93,7 @@ public class InitializationContext {
 	}
 
 	/**
-	 * Return the application configuration.
+	 * Returns the application configuration.
 	 * */
 	public ApplicationConfig getApplicationConfig() {
 		return applicationConfig;

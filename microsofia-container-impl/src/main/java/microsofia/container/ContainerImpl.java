@@ -10,23 +10,20 @@ import org.apache.commons.logging.LogFactory;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-import microsofia.container.application.ApplicationConfig;
 import microsofia.container.application.IApplication;
 import microsofia.container.module.IModule;
 
 /**
- * Entry point of microsofia-container.<br>
- * 
- * The launcher will first load all the container modules and the application to run, then iterate on them in 2 steps.<br>
- * In the first step of pre-initialization, Guice modules are created and added in the LauncherContext.<br>
- * Once the step of pre-initialization is done, a Guice injector is created with all the created Guice modules, 
- * then a second iteration of post-initialization is done.
+ * The implementation of a microsofia container.<br>
  * 
  * */
 public class ContainerImpl extends Container{
 	private static Log log=LogFactory.getLog(ContainerImpl.class);
+	//the container modules
 	private List<IModule> modules;
+	//all available applications
 	private List<IApplication> applications;
+	//the application instance to run
 	private IApplication currentApplication;
  	
 	public ContainerImpl(){
@@ -35,7 +32,7 @@ public class ContainerImpl extends Container{
 	}
 
 	/**
-	 * List of all loaded container's modules.
+	 * Lists of all loaded container's modules.
 	 * 
 	 * @return the container's modules
 	 * */
@@ -44,7 +41,7 @@ public class ContainerImpl extends Container{
 	}
 	
 	/**
-	 * Return the current application that was loaded and run.
+	 * Returns the current application that was loaded and run.
 	 * 
 	 * @return the application that is run
 	 * */
@@ -53,7 +50,7 @@ public class ContainerImpl extends Container{
 	}
 	
 	/**
-	 * Return the list of all available applications
+	 * Returns the list of all available applications
 	 * 
 	 * @return the list of all available applications
 	 * */
@@ -62,7 +59,7 @@ public class ContainerImpl extends Container{
 	}
 
 	/*
-	 * First iteration of the modules in order to pre-initialize the launcher context
+	 * First iteration of the modules in order to pre-initialize the modules
 	 */
 	private void preInitModules(InitializationContext context){
 		ServiceLoader<IModule> moduleLoader=ServiceLoader.load(IModule.class,ContainerImpl.class.getClassLoader());
@@ -129,7 +126,7 @@ public class ContainerImpl extends Container{
 	
 	/**
 	 * Method that will trigger the container to load its modules and to start the application using
-	 * as all available configuration (the application configuration and the arguments).
+	 * the available configuration (the application configuration and the arguments).
 	 * 
 	 * @return the started application
 	 * */
