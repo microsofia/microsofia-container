@@ -13,7 +13,7 @@ import org.w3c.dom.Element;
 import microsofia.container.module.ResourceConfig;
 
 /**
- * Represents a named property with a value. The value can be either a simple value either a marshalled JAXB object when possible.
+ * Represents a named property with a value. The value can be either a simple value either a marshaled JAXB object.
  * <br/>
  * Example: <br/>
  <pre>

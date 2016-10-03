@@ -4,7 +4,7 @@ import microsofia.container.module.IModule;
 
 /**
  * Interface of an application. An application is a module, has a descriptor and a run method.
- * The module descriptor object contains its meta data.
+ * The application descriptor contains its metadata.
  * */
 public interface IApplication extends IModule{
 	

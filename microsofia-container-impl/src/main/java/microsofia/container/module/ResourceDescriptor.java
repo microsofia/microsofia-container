@@ -4,7 +4,7 @@ package microsofia.container.module;
  * Parent class for resource's descriptor.
  * */
 public class ResourceDescriptor {
-	//name of the descriptor
+	//name of the resource
 	protected String name;
 	//is the resource required
 	protected boolean required;
@@ -14,14 +14,14 @@ public class ResourceDescriptor {
 	}
 
 	/**
-	 * Returns the name of the resource descriptor.
+	 * Returns the name of the resource.
 	 * */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Sets the name of the resource descriptor.
+	 * Sets the name of the resource.
 	 * */
 	public void setName(String name) {
 		this.name = name;

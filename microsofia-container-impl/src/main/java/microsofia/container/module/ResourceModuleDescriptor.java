@@ -7,7 +7,7 @@ import java.util.Map;
  * Parent class for resource's module descriptor.
  * */
 public class ResourceModuleDescriptor<R extends ResourceDescriptor> {
-	//instance of resource descritpors. Map of name->resource descriptor
+	//instance of resource descriptors. Map of name->resource descriptor
 	private Map<String,R> descriptors;
 	
 	protected ResourceModuleDescriptor() {
@@ -15,14 +15,14 @@ public class ResourceModuleDescriptor<R extends ResourceDescriptor> {
 	}
 
 	/**
-	 * Adds a descriptor.
+	 * Adds a resource descriptor.
 	 * */
 	public void addDescriptor(R d){
 		descriptors.put(d.getName(), d);
 	}
 	
 	/**
-	 * Returns a descriptor by name.
+	 * Returns a resource descriptor by name.
 	 * */
 	public R getDescriptor(String name) {
 		return descriptors.get(name);

@@ -85,7 +85,7 @@ public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyCo
 	}
 
 	/**
-	 * Create a resource from its name and its configuration. In this case, this method
+	 * Creates a resource from its name and its configuration. In this case, this method
 	 * will get the value of the property named name. If the value is a JAXB type, then
 	 * it will unmarshal the property element and returns it.
 	 * 

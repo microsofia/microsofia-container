@@ -9,6 +9,9 @@ public class Utils {
 	 * */
 	public static HikariConfig createHikariConfig(JDBCConfig jdbcConfig){
 		HikariConfig config=new HikariConfig();
+		if (jdbcConfig.getType()!=null){
+			config.setDataSourceClassName(jdbcConfig.getType().getDataSourceClass());
+		}
 		if (jdbcConfig.getConnectionTimeout()!=null){
 			config.setConnectionTimeout(jdbcConfig.getConnectionTimeout());
 		}
@@ -52,7 +55,7 @@ public class Utils {
 			config.setJdbcUrl(jdbcConfig.getJdbcUrl());
 		}
 		if (jdbcConfig.getPassword()!=null){
-			config.setPassword(jdbcConfig.getPassword());//TODO crypt 2 ways
+			config.setPassword(jdbcConfig.getPassword());//TODO crypt password 2 ways
 		}
 		if (jdbcConfig.getPoolName()!=null){
 			config.setPoolName(jdbcConfig.getPoolName());

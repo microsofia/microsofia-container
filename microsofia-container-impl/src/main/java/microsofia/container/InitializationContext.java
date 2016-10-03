@@ -49,7 +49,7 @@ public class InitializationContext {
 	}
 	
 	/**
-	 * Returns all Guice created modules.
+	 * Returns all created Guice modules.
 	 * */
 	public List<Module> getGuiceModules(){
 		return guiceModules;

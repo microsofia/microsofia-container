@@ -5,6 +5,9 @@ import java.util.List;
 
 import microsofia.container.module.ResourceDescriptor;
 
+/**
+ * JPA resource descriptor. The entity classes are needed in order to create the EntityManagerFactory.
+ * */
 public class JPADescriptor extends ResourceDescriptor{
 	private List<Class<?>> entitiesClass;
 
@@ -13,14 +16,23 @@ public class JPADescriptor extends ResourceDescriptor{
 		entitiesClass=new ArrayList<Class<?>>();
 	}
 
+	/**
+	 * Adds an entity class.
+	 * */
 	public void addEntityClass(Class<?> c){
 		entitiesClass.add(c);
 	}
 	
+	/**
+	 * Returns the entity classes.
+	 * */
 	public List<Class<?>> getEntitiesClass() {
 		return entitiesClass;
 	}
 
+	/**
+	 * Returns the entity class names.
+	 * */
 	public List<String> getEntitiesClassName() {
 		List<String> names=new ArrayList<>();
 		entitiesClass.forEach(it->{
@@ -28,7 +40,10 @@ public class JPADescriptor extends ResourceDescriptor{
 		});;
 		return names;
 	}
-	
+
+	/**
+	 * Sets the entity classes.
+	 * */
 	public void setEntitiesClass(List<Class<?>> entitiesClass) {
 		this.entitiesClass = entitiesClass;
 	}

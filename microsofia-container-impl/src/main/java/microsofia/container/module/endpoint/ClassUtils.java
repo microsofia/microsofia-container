@@ -4,17 +4,33 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class introspection utilities.
+ * */
 public class ClassUtils {
 
+	/**
+	 * Searches for an annotation in the interfaces of a class and all the interfaces parents.
+	 * 
+	 * @param c the class to search on
+	 * @param ca the annotation type
+	 * @return the annotation instance
+	 * */
 	public static <A extends Annotation> A getAnnotationOnInterface(Class<?> c,Class<A> ca){
-		if (c.getInterfaces()!=null){
-			for (Class<?> i : c.getInterfaces()){
+		Class<?>[] intef;
+		if (c.isInterface()){
+			intef=new Class<?>[]{c};
+		}else{
+			intef=c.getInterfaces();
+		}
+		if (intef!=null){
+			for (Class<?> i : intef){
 				A a=i.getAnnotation(ca);
 				if (a!=null){
 					return a;
 				}
 			}
-			for (Class<?> i : c.getInterfaces()){
+			for (Class<?> i : intef){
 				A a=getAnnotationOnClass(i, ca);
 				if (a!=null){
 					return a;
@@ -24,6 +40,13 @@ public class ClassUtils {
 		return null;
 	}
 	
+	/**
+	 * Searches for an annotation in a class and all its superclass.
+	 * 
+	 * @param c the class to search in
+	 * @param ca the annotation type
+	 * @return the annotation instance
+	 * */
 	public static <A extends Annotation> A getAnnotationOnClass(Class<?> c,Class<A> ca){
 		A a=c.getAnnotation(ca);
 		while (a==null && c.getSuperclass()!=null){
@@ -33,6 +56,13 @@ public class ClassUtils {
 		return a;
     }
 
+	/**
+	 * Searches for all interfaces in a class having an annotation.
+	 * 
+	 * @param c the class to search in
+	 * @param ca the annotation type
+	 * @return the list of interfaces
+	 * */
 	public static <A extends Annotation> Class<?>[] getInterfacesWithAnnotation(Class<?> c,Class<A> ca){
 		List<Class<?>> interf=new ArrayList<Class<?>>();
 		while (c!=null){

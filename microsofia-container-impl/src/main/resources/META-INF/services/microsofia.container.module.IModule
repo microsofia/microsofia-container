@@ -1,4 +1,5 @@
 microsofia.container.module.property.PropertyModule
+microsofia.container.module.jta.JTAModule
 microsofia.container.module.db.jdbc.JDBCModule
 microsofia.container.module.db.jpa.JPAModule
 microsofia.container.module.endpoint.EndpointModule

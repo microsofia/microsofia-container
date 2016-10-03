@@ -4,6 +4,9 @@ import java.lang.annotation.Annotation;
 
 import microsofia.container.module.ResourceAnnotation;
 
+/**
+ * Implementation of Client annotation used to configure Guice module.
+ * */
 public class ClientImpl extends ResourceAnnotation implements Client{
 		
 	public ClientImpl(String name){

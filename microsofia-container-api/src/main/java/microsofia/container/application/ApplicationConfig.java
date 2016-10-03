@@ -21,11 +21,12 @@ import org.w3c.dom.Element;
 import microsofia.container.module.db.jdbc.JDBCConfig;
 import microsofia.container.module.db.jpa.JPAConfig;
 import microsofia.container.module.endpoint.EndpointConfig;
+import microsofia.container.module.jta.JTAConfig;
 
 /**
  * Application configuration used to configure the container at startup.<br/>
  * The container has several available types of applications that are accessible via its classpath at runtime.
- * Only the application which type is specified in the configuration will be started. 
+ * Only the application which type is specified in the configuration will be started. <br/>
  * Typically the configuration is read from the microsofia-boot settings file. <br/>
  * <br/>
  * Example:
@@ -123,6 +124,9 @@ public class ApplicationConfig {
 	@XmlElementWrapper(name="properties")
 	@XmlElement(name="property")
 	private List<PropertyConfig> properties;
+	@XmlElementWrapper(name="transactionmanagers")
+	@XmlElement(name="transactionmanager")
+	private List<JTAConfig> jtaConfigs;
 	@XmlElementWrapper(name="databases")
 	@XmlElement(name="database")
 	private List<JDBCConfig> jdbcConfigs;
@@ -135,6 +139,7 @@ public class ApplicationConfig {
 	
 	public ApplicationConfig(){
 		properties=new ArrayList<>();
+		jtaConfigs=new ArrayList<>();
 		jdbcConfigs=new ArrayList<>();
 		jpaConfigs=new ArrayList<>();
 		endpointConfigs=new ArrayList<>();
@@ -194,6 +199,20 @@ public class ApplicationConfig {
 		this.properties = properties;
 	}
 	
+	/**
+	 * Returns the JTA module configuration.
+	 * */
+	public List<JTAConfig> getJTAConfigs() {
+		return jtaConfigs;
+	}
+
+	/**
+	 * Sets the JTA module configuration.
+	 * */
+	public void setJTAConfigs(List<JTAConfig> jtaConfigs) {
+		this.jtaConfigs = jtaConfigs;
+	}
+
 	/**
 	 * Returns the JDBC configurations that will be used to configure the JDBC module.
 	 * 

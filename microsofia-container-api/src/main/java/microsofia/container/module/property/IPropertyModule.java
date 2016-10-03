@@ -2,9 +2,9 @@ package microsofia.container.module.property;
 
 /**
  * Public interface of the property module. It can be injected in case there is
- * a use case where injecting the value is not enough. <br />
+ * a use case where injecting the property value is not enough. <br />
  * <br />
- * Example: <br />
+ * Example:
  * <pre>
 <br />
 public class Sample{<br />

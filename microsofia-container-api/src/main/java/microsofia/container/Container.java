@@ -5,7 +5,7 @@ import org.w3c.dom.Element;
 import microsofia.container.application.ApplicationConfig;
 
 /**
- * A microsofia container. When starting the container, it will load its modules and application, initialize them and 
+ * A microsofia container. When starting the container, it will load all its modules and application, initialize them and 
  * run the application. The modules offer several capabilities and are configured via the application configuration.
  * 
  * */

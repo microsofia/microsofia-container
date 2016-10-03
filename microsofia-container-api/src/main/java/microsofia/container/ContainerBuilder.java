@@ -46,7 +46,7 @@ public class ContainerBuilder {
 	}
 
 	/**
-	 * Returns a newly created instance of container. The returned container is not started yet.
+	 * Returns a newly created instance of a container. The returned container is not started yet.
 	 * */
 	public Container build(){
 		ServiceLoader<Container> loader=ServiceLoader.load(Container.class, ContainerBuilder.class.getClassLoader());

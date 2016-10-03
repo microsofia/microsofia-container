@@ -20,7 +20,13 @@ public abstract class EndpointConfig<C extends ClientConfig, S extends ServerCon
 	protected EndpointConfig(){
 	}
 
+	/**
+	 * Returns the client endpoint configuration.
+	 * */
 	public abstract C getClientConfig();
 
+	/**
+	 * Returns the server endpoint configuration.
+	 * */
 	public abstract S getServerConfig();
 }

@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 import microsofia.container.module.ResourceConfig;
@@ -17,6 +18,38 @@ import microsofia.container.module.ResourceConfig;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class JDBCConfig extends ResourceConfig{
+	/**
+	 * The Database type. Instead of configuring the dataSourceClassName filling the type is enough.
+	 * */
+	public enum TYPE{
+		derby("org.apache.derby.jdbc.ClientDataSource"),
+		firebird("org.firebirdsql.pool.FBSimpleDataSource"),
+		h2("org.h2.jdbcx.JdbcDataSource"),
+		hsqldb("org.hsqldb.jdbc.JDBCDataSource"),
+		db2("com.ibm.db2.jcc.DB2SimpleDataSource"),
+		informix("com.informix.jdbcx.IfxDataSource"),
+		sqlserver("com.microsoft.sqlserver.jdbc.SQLServerDataSource"),
+		mysql("com.mysql.jdbc.jdbc2.optional.MysqlDataSource"),
+		mariadb("org.mariadb.jdbc.MySQLDataSource"),
+		oracle("oracle.jdbc.pool.OracleDataSource"),
+		orientdb("com.orientechnologies.orient.jdbc.OrientDataSource"),
+		postgresql("com.impossibl.postgres.jdbc.PGDataSource"),
+		maxdb("com.sap.dbtech.jdbc.DriverSapDB"),
+		sqlite("org.sqlite.SQLiteDataSource"),
+		sybase("com.sybase.jdbc4.jdbc.SybDataSource");
+		
+		private String dataSourceClass;
+		
+		TYPE(String c){
+			dataSourceClass=c;
+		}
+		
+		public String getDataSourceClass(){
+			return dataSourceClass;
+		}		
+	};
+	@XmlAttribute
+	private TYPE type;
 	@XmlElement
 	private Long connectionTimeout;
 	@XmlElement   
@@ -69,6 +102,14 @@ public class JDBCConfig extends ResourceConfig{
 	private Properties dataSourceProperties;
 	
 	public JDBCConfig(){
+	}
+	
+	public TYPE getType(){
+		return type;
+	}
+	
+	public void setType(TYPE t){
+		this.type=t;
 	}
 
 	public Long getConnectionTimeout() {

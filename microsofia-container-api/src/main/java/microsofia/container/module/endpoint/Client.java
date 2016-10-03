@@ -35,5 +35,9 @@ import com.google.inject.BindingAnnotation;
 @Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD }) 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Client {
+	
+	/**
+	 * The endpoint name. The module will use the name to configure how to locate the remote object.
+	 * */
 	String value();
 }

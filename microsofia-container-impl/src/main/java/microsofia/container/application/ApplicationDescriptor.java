@@ -3,18 +3,20 @@ package microsofia.container.application;
 import microsofia.container.module.db.jdbc.JDBCsDescriptor;
 import microsofia.container.module.db.jpa.JPAsDescriptor;
 import microsofia.container.module.endpoint.EndpointsDescriptor;
+import microsofia.container.module.jta.JTAsDescriptor;
 import microsofia.container.module.property.PropertiesDescriptor;
 
-//TODO: have nice builder api
+//TODO: have nice builder api + via annotations
 /**
  * The application descriptor contains the application and the modules metadatas.
- * 
  * */
 public class ApplicationDescriptor {
 	//the application type
 	private String type;
 	//properties module descriptor
 	private PropertiesDescriptor propertiesDescriptor;
+	//jta module descriptor
+	private JTAsDescriptor jtasDescriptor;
 	//jdbc module descriptor
 	private JDBCsDescriptor jdbcsDescriptor;
 	//jpa module descriptor
@@ -24,6 +26,7 @@ public class ApplicationDescriptor {
 
 	public ApplicationDescriptor(){
 		propertiesDescriptor=new PropertiesDescriptor();
+		jtasDescriptor=new JTAsDescriptor();
 		jdbcsDescriptor=new JDBCsDescriptor();
 		endpoints=new EndpointsDescriptor();
 		jpasDescriptor=new JPAsDescriptor();
@@ -48,6 +51,13 @@ public class ApplicationDescriptor {
 	 * */
 	public PropertiesDescriptor getPropertiesDescriptor() {
 		return propertiesDescriptor;
+	}
+
+	/**
+	 * Returns the JTA module descriptor.
+	 * */
+	public JTAsDescriptor getJTAsDescriptor() {
+		return jtasDescriptor;
 	}
 
 	/**

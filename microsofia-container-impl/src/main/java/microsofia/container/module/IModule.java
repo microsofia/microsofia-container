@@ -13,13 +13,13 @@ import microsofia.container.InitializationContext;
 public interface IModule {
 
 	/**
-	 * Method called during the first phase of pre initialization in order to allow
+	 * Method called during the first phase of pre-initialization in order to allow
 	 * every module to initialize itself and for example set up its Guice modules.
 	 * */
 	public void preInit(InitializationContext context);
 
 	/**
-	 * Method called during the second phase, at post initialization.
+	 * Method called during the second phase, at post-initialization.
 	 * 
 	 * */
 	public void postInit(InitializationContext context);

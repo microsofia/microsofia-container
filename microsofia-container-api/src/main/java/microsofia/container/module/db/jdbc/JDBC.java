@@ -16,15 +16,17 @@ import com.google.inject.BindingAnnotation;
  * <br />
  * Examples:<br />
  * <br />
- * <br />
- * <br />
- * <code> <pre> public class Sample{ <br />
+ * <code> 
+<pre>
+public class Sample{ <br />
 &#64;Inject<br />
- <span class=
-"tags">@JDBC("database_name")</span>  //the database name to connect to<br />
+<span class="tags">@JDBC("database_name")</span>  //the database name to connect to<br />
 DataSource dataSource;  <br />
 }  <br />
-</pre> </code> The JDBC module loads from the application configuration the
+</pre> 
+</code> 
+
+ * The JDBC module loads from the application configuration the
  * needed informations in order to create the datasource to inject.
  */
 @BindingAnnotation

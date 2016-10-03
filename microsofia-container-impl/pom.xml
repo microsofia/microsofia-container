@@ -79,5 +79,9 @@
 	      <groupId>org.eclipse.jetty</groupId>
 	      <artifactId>jetty-util</artifactId>
 	   </dependency>
+	   <dependency>
+		  <groupId>org.codehaus.btm</groupId>
+		  <artifactId>btm</artifactId>
+		</dependency>
     </dependencies>
 </project>

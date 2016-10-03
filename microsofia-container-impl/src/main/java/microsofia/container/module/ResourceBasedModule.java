@@ -101,7 +101,7 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 	}
 
 	/**
-	 * Creates a Guice module
+	 * Creates a default Guice module
 	 * */
 	protected com.google.inject.AbstractModule createGuiceModule(InitializationContext context){
 		return new GuiceModule(context);
@@ -125,7 +125,7 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 	protected abstract A createResourceAnnotation(String name);
 	
 	/**
-	 * Returns a resource by its name. If the resource is not already created, then
+	 * Returns a resource by name. If the resource is not already created, then
 	 * the method will create it.
 	 * 
 	 * @param name the resource name
@@ -153,7 +153,7 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 	}
 	
 	/**
-	 * Default Guice module that will bind the default resouce class and annotation to a default resource provider.
+	 * Default Guice module that will bind the default resource class and annotation to a default resource provider.
 	 * */
 	protected class GuiceModule extends com.google.inject.AbstractModule{
 		protected InitializationContext context;

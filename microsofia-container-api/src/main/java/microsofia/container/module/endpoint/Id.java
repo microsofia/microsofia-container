@@ -18,7 +18,6 @@ import java.lang.annotation.Target;
    }<br />
 	<br />  
 	&#64;Server <br />
-	@Id("id_object") //id used when exporting the object<br /> 
 	public class RemoteObject implements IRemoteObject{<br /> 
 	... <br />  
 	}<br />  

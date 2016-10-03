@@ -2,6 +2,7 @@ package microsofia.container.module.db.jdbc;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -10,15 +11,18 @@ import com.zaxxer.hikari.HikariDataSource;
 import microsofia.container.InitializationContext;
 import microsofia.container.application.ApplicationDescriptor;
 import microsofia.container.module.ResourceBasedModule;
+import microsofia.container.module.jta.IJTAModule;
 
-/*
- * - TODO : inject XADatasource
- * -TODO :define predefined database type
- */
 /**
- * The JDBC module creates and manages DataSource(s). 
+ * The JDBC module creates and manages DataSource(s). <br/>
+ * XA Datasource are not handled by the module. In theory it should be and everything is setup for that (TM, ...). <br/>
+ * As by experience XA handling is costly to implement correctly, it will be postponed as much as possible. <br/>
+ * Better and easier solutions can be used at higher layer.
  * */
 public class JDBCModule extends ResourceBasedModule<JDBCImpl, JDBCConfig,DataSource, JDBCDescriptor, JDBCsDescriptor> implements IJDBCModule{
+	@SuppressWarnings("unused")
+	@Inject
+	private IJTAModule jtaModule;
 	
 	public JDBCModule(){
 		super(DataSource.class);
@@ -93,7 +97,7 @@ public class JDBCModule extends ResourceBasedModule<JDBCImpl, JDBCConfig,DataSou
 		}
 
 		/**
-		 * The additional binding that the module adds is its public interface to itself.
+		 * The additional binding that the module adds is its public interface, binded to itself.
 		 * */
 		@Override
 		protected void configure(){			

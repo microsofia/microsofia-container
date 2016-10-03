@@ -1,27 +1,30 @@
-package microsofia.container.module.endpoint;
+package microsofia.container.module.jta;
 
 import java.lang.annotation.Annotation;
 
 import microsofia.container.module.ResourceAnnotation;
 
-public class ServerImpl extends ResourceAnnotation implements Server{
+/**
+ * Implementation of the JDBC annotation, used while configuring Guice bindings.
+ * */
+class JTAImpl extends ResourceAnnotation implements JTA{
 	
-	public ServerImpl(String name){
+	public JTAImpl(String name){
 		super(name);
 	}
 	
 	@Override
 	public Class<? extends Annotation> annotationType() {
-		return Server.class;
+		return JTA.class;
 	}
-	
+
 	 @Override 
 	 public boolean equals(Object o) {
-		 if (!(o instanceof Server)) {
+		 if (!(o instanceof JTA)) {
 			 return false;
 	     }
 
-		 Server other = (Server) o;
+	     JTA other = (JTA) o;
 	     return name.equals(other.value());
 	 }
 }
