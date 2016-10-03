@@ -10,6 +10,9 @@ import org.junit.Test;
 
 import microsofia.container.module.AbstractTestModule;
 
+/**
+ * Test the JDBC module.
+ * */
 public class TestJDBCModule extends AbstractTestModule{
 	@Inject
 	@JDBC("db1")

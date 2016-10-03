@@ -24,7 +24,7 @@ public class JTAModule extends ResourceBasedModule<JTAImpl, JTAConfig,Transactio
 	 * */
 	@Override
 	protected TransactionManager createResource(String name, JTAConfig c) {
-		return TransactionManagerServices.getTransactionManager();//TODO allow configuration
+		return TransactionManagerServices.getTransactionManager();//LATER: when implemeting XA, allow TM configuration
 	}
 	
 	/**

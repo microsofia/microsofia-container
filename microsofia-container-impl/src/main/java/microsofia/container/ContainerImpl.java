@@ -7,6 +7,7 @@ import java.util.ServiceLoader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -25,6 +26,8 @@ public class ContainerImpl extends Container{
 	private List<IApplication> applications;
 	//the application instance to run
 	private IApplication currentApplication;
+	//Guice injector
+	private Injector injector;
  	
 	public ContainerImpl(){
 		modules=new ArrayList<>();
@@ -58,6 +61,19 @@ public class ContainerImpl extends Container{
 		return applications;
 	}
 
+	/*
+	 * Adds native container Guice module.
+	 * */
+	private void addNativeModules(InitializationContext context){
+		context.addGuiceModule(new AbstractModule() {
+			
+			@Override
+			protected void configure() {
+				bind(Container.class).toInstance(ContainerImpl.this);
+			}
+		});
+	}
+	
 	/*
 	 * First iteration of the modules in order to pre-initialize the modules
 	 */
@@ -135,6 +151,9 @@ public class ContainerImpl extends Container{
 		InitializationContext context=new InitializationContext(arguments);
 		//setting the application configuration to be used
 		context.setApplicationConfig(getApplicationConfig());
+		
+		//add native Guice modules
+		addNativeModules(context);
 
 		log.info("Loading modules...");
 		preInitModules(context);
@@ -143,7 +162,7 @@ public class ContainerImpl extends Container{
 		currentApplication=loadApplication(context);
 	
 		//create Guice injector
-		Injector injector=Guice.createInjector(context.getGuiceModules());
+		injector=Guice.createInjector(context.getGuiceModules());
 		context.setInjector(injector);
 		
 		log.info("Injecting in modules...");
@@ -159,6 +178,15 @@ public class ContainerImpl extends Container{
 
 		log.info("Running the application...");
 		currentApplication.run();
+	}
+	
+	/**
+	 * Injects dependencies into the fields and methods of the object.
+	 * 
+	 * */
+	@Override
+	public void injectMembers(Object object){
+		injector.injectMembers(object);
 	}
 
 	/**

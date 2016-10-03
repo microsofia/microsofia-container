@@ -8,8 +8,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import microsofia.container.module.endpoint.ServerConfig;
+import microsofia.rmi.ServerBuilder;
 import microsofia.rmi.ServerConfiguration;
 
+/**
+ * Server configuration of the microsofia-rmi endpoint.
+ * */
 @XmlRootElement(name="server")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MSofiaRMIServerConfig extends ServerConfig{
@@ -29,54 +33,93 @@ public class MSofiaRMIServerConfig extends ServerConfig{
 	public MSofiaRMIServerConfig(){
 	}
 	
+	/**
+	 * Returns the host of the server.
+	 * */
 	public String getHost() {
 		return host;
 	}
 
+	/**
+	 * Sets the host of the server.
+	 * */
 	public void setHost(String host) {
 		this.host = host;
 	}
 
+	/**
+	 * Returns the port of the server.
+	 * */
 	public Integer getPort() {
 		return port;
 	}
 
+	/**
+	 * Sets the port of the server.
+	 * */
 	public void setPort(Integer port) {
 		this.port = port;
 	}
 
+	/**
+	 * Check {@link ServerBuilder} for explanation.
+	 * */
 	public Long getServerGCTimeout() {
 		return serverGCTimeout;
 	}
 
+	/**
+	 * Check {@link ServerBuilder} for explanation.
+	 * */
 	public void setServerGCTimeout(Long serverGCTimeout) {
 		this.serverGCTimeout = serverGCTimeout;
 	}
 
+	/**
+	 * Check {@link ServerBuilder} for explanation.
+	 * */
 	public Long getClientGCPeriod() {
 		return clientGCPeriod;
 	}
 
+	/**
+	 * Check {@link ServerBuilder} for explanation.
+	 * */
 	public void setClientGCPeriod(Long clientGCPeriod) {
 		this.clientGCPeriod = clientGCPeriod;
 	}
 
+	/**
+	 * Check {@link ServerBuilder} for explanation.
+	 * */
 	public Integer getClientGCExceptionThreshold() {
 		return clientGCExceptionThreshold;
 	}
 
+	/**
+	 * Check {@link ServerBuilder} for explanation.
+	 * */
 	public void setClientGCExceptionThreshold(Integer clientGCExceptionThreshold) {
 		this.clientGCExceptionThreshold = clientGCExceptionThreshold;
 	}
 	
+	/**
+	 * Check {@link ServerBuilder} for explanation.
+	 * */
 	public ClientConnectionsConfig getClientConnectionsConfig() {
 		return clientConnectionsConfig;
 	}
 
+	/**
+	 * Check {@link ServerBuilder} for explanation.
+	 * */
 	public void setClientConnectionsConfig(ClientConnectionsConfig clientConnectionsConfig) {
 		this.clientConnectionsConfig = clientConnectionsConfig;
 	}
 
+	/**
+	 * Check {@link ServerBuilder} for explanation.
+	 * */
 	public ServerConfiguration createServerConfiguration(){
 		ServerConfiguration config=new ServerConfiguration();
 		if (serverGCTimeout!=null){
@@ -94,6 +137,9 @@ public class MSofiaRMIServerConfig extends ServerConfig{
 	    return config;
 	}
 
+	/**
+	 * Check {@link ServerBuilder} for explanation.
+	 * */
 	@XmlRootElement(name="clientconnections")
 	@XmlAccessorType(XmlAccessType.FIELD)
 	public static class ClientConnectionsConfig{	

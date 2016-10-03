@@ -157,7 +157,7 @@ public class EndpointModule extends ResourceBasedModule<ClientImpl, EndpointConf
 								            	Server server=ClassUtils.getAnnotationOnClass(i.getClass(),Server.class);
 							                	Endpoint endpoint=getEndpoint(server.value());
 							                	Class<?>[] interf=ClassUtils.getInterfacesWithAnnotation(i.getClass(), Server.class);
-												endpoint.getServer().export(getServerId(i),i,interf);
+												endpoint.getServer().export(getServerId(i,interf),i,interf);
 							                }
 							            }
 							        });
@@ -180,16 +180,18 @@ public class EndpointModule extends ResourceBasedModule<ClientImpl, EndpointConf
 					//fetch the endpoint
 					Endpoint endpoint=getEndpoint(server.value());
 					Object result=invocation.proceed();
+
+					//intefaces annotated with @Server
+					Class<?>[] interf=ClassUtils.getInterfacesWithAnnotation(invocation.getThis().getClass(), Server.class);
 					
 					//is it an export or unexport?
 					if (invocation.getMethod().isAnnotationPresent(Export.class)){
-						//it is an export
-						Class<?>[] interf=ClassUtils.getInterfacesWithAnnotation(invocation.getThis().getClass(), Server.class);
-						endpoint.getServer().export(getServerId(invocation.getThis()), invocation.getThis(),interf);
+						//it is an export						
+						endpoint.getServer().export(getServerId(invocation.getThis(),interf), invocation.getThis(),interf);
 
 					}else{
 						//it is an unexport
-						endpoint.getServer().unexport(getServerId(invocation.getThis()),invocation.getThis());
+						endpoint.getServer().unexport(getServerId(invocation.getThis(),interf),invocation.getThis());
 					}
 					return result;
 				}
@@ -201,12 +203,16 @@ public class EndpointModule extends ResourceBasedModule<ClientImpl, EndpointConf
 	 * Returns the object id from the object to export or unexport.
 	 * It checks if there is an @Id annotation on one of its interfaces.
 	 * */
-	protected String getServerId(Object object){
+	protected String getServerId(Object object,Class<?>[] interf){
 		Id id=ClassUtils.getAnnotationOnInterface(object.getClass(), Id.class);
 		if (id!=null){
 			return id.value();
 		}
-		return null;
+		if (interf.length>0){
+			return interf[0].getName();//return the class name of the first interface annotated with @Server ...
+		}else{
+			return null;
+		}
 	}
 
 	/**

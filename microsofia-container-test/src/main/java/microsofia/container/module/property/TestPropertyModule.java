@@ -12,6 +12,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import microsofia.container.module.AbstractTestModule;
 
+/**
+ * Test the property module.
+ * */
 public class TestPropertyModule extends AbstractTestModule{
 	@Inject
 	@Property("k1")

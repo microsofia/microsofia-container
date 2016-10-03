@@ -4,7 +4,6 @@ import microsofia.container.InitializationContext;
 
 /*
  * - TODO : inject JMS
- * - TODO : have utilities injection, like ILifecycle interface, Injector wrapper, etc
  * */
 /**
  * Interface of microsofia's container module.

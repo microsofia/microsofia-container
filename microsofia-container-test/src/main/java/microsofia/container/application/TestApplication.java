@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
@@ -15,8 +16,8 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
 
+import microsofia.container.Container;
 import microsofia.container.ContainerBuilder;
 import microsofia.container.InitializationContext;
 import microsofia.container.application.AbstractApplication;
@@ -34,9 +35,10 @@ import microsofia.container.module.property.PropertyDescriptor;
 import microsofia.container.module.property.TestPropertyModule;
 
 public class TestApplication extends AbstractApplication{
+	@Inject
+	private Container container;
 	private static TestApplication instance;
 	private static boolean fromUnitTest;
-	private Injector injector;
 
 	public TestApplication(){
 		applicationDescriptor=new ApplicationDescriptor();
@@ -77,9 +79,9 @@ public class TestApplication extends AbstractApplication{
 		pd7.setObjectType(TestPropertyModule.Configuration.class);
 		applicationDescriptor.getPropertiesDescriptor().addDescriptor(pd7);		
 	}
-
-	public Injector getInjector(){
-		return injector;
+	
+	public Container getContainer(){
+		return container;
 	}
 	
 	@Override
@@ -93,11 +95,6 @@ public class TestApplication extends AbstractApplication{
 				bind(ISample2.class).to(Sample2.class);
 			}
 		});
-	}
-
-	@Override
-	public void postInit(InitializationContext context){
-		this.injector=context.getInjector();
 	}
 
 	public void run() throws Throwable{

@@ -13,6 +13,9 @@ import org.junit.Test;
 
 import microsofia.container.module.AbstractTestModule;
 
+/**
+ * Test REST endpoint.
+ * */
 public class TestRestEndpointModule extends AbstractTestModule{
 	@Inject
 	@Client("rest1")

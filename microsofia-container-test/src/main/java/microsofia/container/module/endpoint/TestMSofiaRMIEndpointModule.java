@@ -8,6 +8,9 @@ import org.junit.Test;
 
 import microsofia.container.module.AbstractTestModule;
 
+/**
+ * Test microsofia-rmi endpoint.
+ * */
 public class TestMSofiaRMIEndpointModule extends AbstractTestModule{
 	@Inject
 	private Sample sample;

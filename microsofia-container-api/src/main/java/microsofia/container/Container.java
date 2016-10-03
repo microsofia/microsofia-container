@@ -40,6 +40,12 @@ public abstract class Container {
 	 * 
 	 * */
 	public abstract void start() throws Throwable;
+	
+	/**
+	 * Injects dependencies into the fields and methods of the object.
+	 * 
+	 * */
+	public abstract void injectMembers(Object object);
 
 	/**
 	 * Stops the container and frees any resources it is currently using.

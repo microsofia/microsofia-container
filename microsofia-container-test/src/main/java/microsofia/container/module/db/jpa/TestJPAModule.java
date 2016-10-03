@@ -8,6 +8,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import microsofia.container.module.AbstractTestModule;
 
+/**
+ * Test the JPA module.
+ * */
 public class TestJPAModule extends AbstractTestModule{
 	@Inject
 	@JPA("jpa1")

@@ -11,6 +11,9 @@ import microsofia.container.module.endpoint.TestMSofiaRMIEndpointModule;
 import microsofia.container.module.endpoint.TestRMIEndpointModule;
 import microsofia.container.module.property.TestPropertyModule;
 
+/**
+ * Suite containing all the tests.
+ * */
 @RunWith(Suite.class)
 @SuiteClasses({TestRestEndpointModule.class,TestPropertyModule.class,TestJDBCModule.class,TestJPAModule.class,TestRMIEndpointModule.class,
 				TestMSofiaRMIEndpointModule.class})

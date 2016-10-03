@@ -1,6 +1,7 @@
 package microsofia.container.module.endpoint;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,4 +79,13 @@ public class ClassUtils {
 		}
 		return interf.toArray(new Class<?>[0]);
     }
+	
+	public static <A extends Annotation> Method getMethod(Object o,Class<A> ca){
+		for (Method m : o.getClass().getMethods()){
+			if (m.isAnnotationPresent(ca)){
+				return m;
+			}
+		}
+		return null;
+	}
 }

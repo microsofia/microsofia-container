@@ -4,6 +4,9 @@ import org.junit.Before;
 
 import microsofia.container.application.TestApplication;
 
+/**
+ * Base parent for all test classes.
+ * */
 public class AbstractTestModule {
 
 	public AbstractTestModule(){
@@ -11,7 +14,7 @@ public class AbstractTestModule {
 	
 	@Before
 	public void setup() throws Throwable{
-		TestApplication.getInstance().getInjector().injectMembers(this);
+		TestApplication.getInstance().getContainer().injectMembers(this);
 	}
 
 }

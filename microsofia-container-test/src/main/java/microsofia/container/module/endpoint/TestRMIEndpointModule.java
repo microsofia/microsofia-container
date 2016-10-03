@@ -11,6 +11,9 @@ import org.junit.Test;
 
 import microsofia.container.module.AbstractTestModule;
 
+/**
+ * Test RMI endpoint.
+ * */
 public class TestRMIEndpointModule extends AbstractTestModule{
 	@Inject
 	private Sample sample;
@@ -35,6 +38,7 @@ public class TestRMIEndpointModule extends AbstractTestModule{
 		}
 	}
 	
+	@Server
 	public static interface ISample extends Remote{
 		public String getHelloWorld() throws RemoteException;
 	}
