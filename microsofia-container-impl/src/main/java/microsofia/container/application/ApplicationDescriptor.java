@@ -6,7 +6,6 @@ import microsofia.container.module.endpoint.EndpointsDescriptor;
 import microsofia.container.module.jta.JTAsDescriptor;
 import microsofia.container.module.property.PropertiesDescriptor;
 
-//TODO: have nice builder api + via annotations
 /**
  * The application descriptor contains the application and the modules metadatas.
  * */
@@ -40,10 +39,25 @@ public class ApplicationDescriptor {
 	}
 
 	/**
+	 * Sets the application type, builer style.
+	 * */
+	public ApplicationDescriptor type(String type) {
+		setType(type);
+		return this;
+	}
+	
+	/**
 	 * Sets the application type.
 	 * */
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	/**
+	 * Returns the property module descriptor, builder style.
+	 * */
+	public PropertiesDescriptor properties(){
+		return propertiesDescriptor;
 	}
 	
 	/**
@@ -54,6 +68,13 @@ public class ApplicationDescriptor {
 	}
 
 	/**
+	 * Returns the JTA module descriptor, builder style.
+	 * */
+	public JTAsDescriptor jtas() {
+		return jtasDescriptor;
+	}
+	
+	/**
 	 * Returns the JTA module descriptor.
 	 * */
 	public JTAsDescriptor getJTAsDescriptor() {
@@ -61,10 +82,24 @@ public class ApplicationDescriptor {
 	}
 
 	/**
+	 * Returns the JDBC module descriptor, builder style.
+	 * */
+	public JDBCsDescriptor jdbcs() {
+		return jdbcsDescriptor;
+	}
+	
+	/**
 	 * Returns the JDBC module descriptor.
 	 * */
 	public JDBCsDescriptor getJDBCsDescriptor() {
 		return jdbcsDescriptor;
+	}
+	
+	/**
+	 * Returns the JPA module descriptor, builder style
+	 * */
+	public JPAsDescriptor jpas() {
+		return jpasDescriptor;
 	}
 
 	/**
@@ -74,6 +109,13 @@ public class ApplicationDescriptor {
 		return jpasDescriptor;
 	}
 
+	/**
+	 * Returns the endpoint module descriptor, builder style
+	 * */
+	public EndpointsDescriptor endpoints(){
+		return endpoints;
+	}
+	
 	/**
 	 * Returns the endpoint module descriptor.
 	 * */

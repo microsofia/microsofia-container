@@ -7,7 +7,7 @@ public class ResourceDescriptor {
 	//name of the resource
 	protected String name;
 	//is the resource required
-	protected boolean required;
+	protected boolean req;
 
 	protected ResourceDescriptor(String name){
 		this.setName(name);
@@ -21,6 +21,14 @@ public class ResourceDescriptor {
 	}
 
 	/**
+	 * Sets the name of the resource, builder style
+	 * */
+	public ResourceDescriptor name(String name) {
+		setName(name);
+		return this;
+	}
+	
+	/**
 	 * Sets the name of the resource.
 	 * */
 	public void setName(String name) {
@@ -31,14 +39,22 @@ public class ResourceDescriptor {
 	 * Is the resource required?
 	 * */
 	public boolean isRequired() {
-		return required;
+		return req;
 	}
 
+	/**
+	 * Sets if the resource is required, builder style
+	 * */
+	public ResourceDescriptor required(boolean r) {
+		setRequired(r);
+		return this;
+	}
+	
 	/**
 	 * Sets if the resource is required.
 	 * */
 	public void setRequired(boolean required) {
-		this.required = required;
+		this.req = required;
 	}
 
 	/**

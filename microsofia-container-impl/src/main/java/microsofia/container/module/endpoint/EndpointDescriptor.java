@@ -25,6 +25,14 @@ public class EndpointDescriptor extends ResourceDescriptor{
 	}
 
 	/**
+	 * Adds a new class as a possible client interface, builder style.
+	 * */
+	public EndpointDescriptor client(Class<?> interf){
+		clientInterfaces.add(interf);
+		return this;
+	}
+	
+	/**
 	 * Adds a new class as a possible client interface.
 	 * */
 	public void addClientInterface(Class<?> interf){

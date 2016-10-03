@@ -15,6 +15,14 @@ public class JPADescriptor extends ResourceDescriptor{
 		super(name);
 		entitiesClass=new ArrayList<Class<?>>();
 	}
+	
+	/**
+	 * Adds an entity class, builder style.
+	 * */
+	public JPADescriptor entity(Class<?> c){
+		entitiesClass.add(c);
+		return this;
+	}
 
 	/**
 	 * Adds an entity class.

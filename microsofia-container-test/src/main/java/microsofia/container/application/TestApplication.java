@@ -22,8 +22,6 @@ import microsofia.container.ContainerBuilder;
 import microsofia.container.InitializationContext;
 import microsofia.container.application.AbstractApplication;
 import microsofia.container.application.ApplicationDescriptor;
-import microsofia.container.module.db.jpa.JPADescriptor;
-import microsofia.container.module.endpoint.EndpointDescriptor;
 import microsofia.container.module.endpoint.TestMSofiaRMIEndpointModule;
 import microsofia.container.module.endpoint.TestRestEndpointModule;
 import microsofia.container.module.endpoint.TestRMIEndpointModule;
@@ -31,7 +29,6 @@ import microsofia.container.module.endpoint.TestRestEndpointModule.ISample2;
 import microsofia.container.module.endpoint.TestRestEndpointModule.ISample3;
 import microsofia.container.module.endpoint.TestRestEndpointModule.Sample2;
 import microsofia.container.module.endpoint.TestRestEndpointModule.Sample3;
-import microsofia.container.module.property.PropertyDescriptor;
 import microsofia.container.module.property.TestPropertyModule;
 
 public class TestApplication extends AbstractApplication{
@@ -42,42 +39,29 @@ public class TestApplication extends AbstractApplication{
 
 	public TestApplication(){
 		applicationDescriptor=new ApplicationDescriptor();
-		applicationDescriptor.setType("testapp");
+		applicationDescriptor.type("testapp");
 
-		JPADescriptor jpa1=new JPADescriptor("jpa1");
-		applicationDescriptor.getJPAsDescriptor().addDescriptor(jpa1);
+		applicationDescriptor.jpas().jpa("jpa1");//TODO test with .entity(c)
+		applicationDescriptor.jpas().jpa("jpa2");//TODO test with .entity(c)
+
+		applicationDescriptor.endpoints().endpoint("rest1")
+										 .client(TestRestEndpointModule.ISample1.class)
+										 .client(TestRestEndpointModule.ISample2.class)
+										 .client(TestRestEndpointModule.ISample3.class);
 		
-		JPADescriptor jpa2=new JPADescriptor("jpa2");
-		applicationDescriptor.getJPAsDescriptor().addDescriptor(jpa2);
-		
-		EndpointDescriptor sd=new EndpointDescriptor("rest1");
-		sd.addClientInterface(TestRestEndpointModule.ISample1.class);
-		sd.addClientInterface(TestRestEndpointModule.ISample2.class);
-		sd.addClientInterface(TestRestEndpointModule.ISample3.class);
-		applicationDescriptor.getEndpointsDescriptor().addDescriptor(sd);
-		
-		EndpointDescriptor sd2=new EndpointDescriptor("rmi1");
-		sd2.addClientInterface(TestRMIEndpointModule.ISample.class);		
-		applicationDescriptor.getEndpointsDescriptor().addDescriptor(sd2);
-		
-		EndpointDescriptor sd3=new EndpointDescriptor("msofiarmi1");
-		sd3.addClientInterface(TestMSofiaRMIEndpointModule.ISample.class);		
-		sd3.addClientInterface(TestMSofiaRMIEndpointModule.ISample2.class);		
-		applicationDescriptor.getEndpointsDescriptor().addDescriptor(sd3);
-		
-		EndpointDescriptor sd4=new EndpointDescriptor("msofiarmi2");
-		sd4.addClientInterface(TestMSofiaRMIEndpointModule.ISample2.class);		
-		applicationDescriptor.getEndpointsDescriptor().addDescriptor(sd4);
-		
-		PropertyDescriptor pd1=new PropertyDescriptor("k3");
-		pd1.setRequired(true);
-		pd1.setNumericType();
-		applicationDescriptor.getPropertiesDescriptor().addDescriptor(pd1);
-		
-		
-		PropertyDescriptor pd7=new PropertyDescriptor("k7");
-		pd7.setObjectType(TestPropertyModule.Configuration.class);
-		applicationDescriptor.getPropertiesDescriptor().addDescriptor(pd7);		
+		applicationDescriptor.endpoints().endpoint("rmi1")
+									     .client(TestRMIEndpointModule.ISample.class);		
+
+		applicationDescriptor.endpoints().endpoint("msofiarmi1")
+										 .client(TestMSofiaRMIEndpointModule.ISample.class)
+										 .client(TestMSofiaRMIEndpointModule.ISample2.class);
+
+		applicationDescriptor.endpoints().endpoint("msofiarmi2")
+										 .client(TestMSofiaRMIEndpointModule.ISample2.class);		
+
+		applicationDescriptor.properties().property("k3").numericType().required(true);
+
+		applicationDescriptor.properties().property("k7").objectType(TestPropertyModule.Configuration.class);
 	}
 	
 	public Container getContainer(){

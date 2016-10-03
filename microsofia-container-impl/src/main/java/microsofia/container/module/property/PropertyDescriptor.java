@@ -39,6 +39,22 @@ public class PropertyDescriptor extends ResourceDescriptor{
 	}
 
 	/**
+	 * Sets the type as numeric, builder style.
+	 * */
+	public PropertyDescriptor numericType(){
+		setNumericType();
+		return this;
+	}
+	
+	/**
+	 * Sets the type as char, builder type.
+	 * */
+	public PropertyDescriptor stringType(){
+		setType(TYPE.CHAR);
+		return this;
+	}
+	
+	/**
 	 * Sets the type as numeric.
 	 * */
 	public void setNumericType() {
@@ -71,6 +87,15 @@ public class PropertyDescriptor extends ResourceDescriptor{
 	 * */
 	public Class<?> getObjectClass() {
 		return objectClass;
+	}
+	
+	/**
+	 * Sets the type as complex JAXB object and sets its class, builder style.
+	 * 
+	 * */
+	public PropertyDescriptor objectType(Class<?> c){
+		setObjectType(c);
+		return this;
 	}
 	
 	/**

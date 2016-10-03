@@ -9,4 +9,16 @@ public class PropertiesDescriptor extends ResourceModuleDescriptor<PropertyDescr
 	
 	public PropertiesDescriptor(){
 	}
+
+	/**
+	 * Creates and return a property descriptor, builder style.
+	 * */
+	public PropertyDescriptor property(String name){
+		PropertyDescriptor desc=getDescriptor(name);
+		if (desc==null){
+			desc=new PropertyDescriptor(name);
+			addDescriptor(desc);
+		}
+		return desc;
+	}
 }
