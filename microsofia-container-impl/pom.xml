@@ -5,22 +5,22 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>microsofia</groupId>
+		<groupId>com.github.microsofia</groupId>
 		<artifactId>microsofia-container</artifactId>
 		<version>1.0</version>
 	</parent>
 
-	<groupId>microsofia-container</groupId>
+	<groupId>com.github.microsofia</groupId>
 	<artifactId>microsofia-container-impl</artifactId>
 	<version>1.0</version>
 
 	<dependencies>
 		<dependency>
-			<groupId>microsofia</groupId>
+			<groupId>com.github.microsofia</groupId>
 			<artifactId>microsofia-rmi</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>microsofia-container</groupId>
+			<groupId>com.github.microsofia</groupId>
 			<artifactId>microsofia-container-api</artifactId>
 		</dependency>
 		<dependency>

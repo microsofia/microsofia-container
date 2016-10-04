@@ -7,7 +7,7 @@
   -->
   
   <dependency>
-  	<groupId>microsofia-container</groupId>
+  	<groupId>com.github.microsofia</groupId>
 	<artifactId>microsofia-container-test</artifactId>
 	<version>1.0</version>
 

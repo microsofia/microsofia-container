@@ -4,7 +4,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>microsofia</groupId>
+	<groupId>com.github.microsofia</groupId>
 	<artifactId>microsofia-container</artifactId>
 	<version>1.0</version>
 	<packaging>pom</packaging>
@@ -36,22 +36,22 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>microsofia-container</groupId>
+				<groupId>com.github.microsofia</groupId>
 				<artifactId>microsofia-container-api</artifactId>
 				<version>1.0</version>
 			</dependency>
 			<dependency>
-				<groupId>microsofia-container</groupId>
+				<groupId>com.github.microsofia</groupId>
 				<artifactId>microsofia-container-impl</artifactId>
 				<version>1.0</version>
 			</dependency>
 			<dependency>
-				<groupId>microsofia-container</groupId>
+				<groupId>com.github.microsofia</groupId>
 				<artifactId>microsofia-container-test</artifactId>
 				<version>1.0</version>
 			</dependency>
 			<dependency>
-				<groupId>microsofia</groupId>
+				<groupId>com.github.microsofia</groupId>
 				<artifactId>microsofia-rmi</artifactId>
 				<version>1.0</version>
 			</dependency>
