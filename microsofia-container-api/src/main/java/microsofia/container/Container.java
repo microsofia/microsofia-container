@@ -1,5 +1,8 @@
 package microsofia.container;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.w3c.dom.Element;
 
 import microsofia.container.application.ApplicationConfig;
@@ -48,6 +51,12 @@ public abstract class Container {
 	public abstract void injectMembers(Object object);
 
 	/**
+	 * Returns an instance of type c with dependencies injected.
+	 * 
+	 * */
+	public abstract <T> T getInstance(Class<T> c);
+	
+	/**
 	 * Stops the container and frees any resources it is currently using.
 	 * 
 	 * */
@@ -60,15 +69,41 @@ public abstract class Container {
 	 * @param element array of Element(s). First element of the array should contain the application configuration in an XML marshalled form.
 	 * */
 	public static void main(String[] argv, Element[] element) throws Throwable{
-		ContainerBuilder builder=new ContainerBuilder().arguments(argv);
+		ApplicationConfig[] apps=null;
 		if (element!=null){
-			ApplicationConfig[] apps=ApplicationConfig.readFrom(element);
-			if (apps==null || apps.length==0){
-				throw new IllegalStateException("No application is configured to start. Please check your settings file.");
-			}
-			builder.applicationConfig(apps[0]);//for the moment we just launch one
+			apps=ApplicationConfig.readFrom(element);
 		}
-		Container container=builder.build();
-		container.start();
+		if (apps==null || apps.length==0){
+			throw new IllegalStateException("No application is configured to start. Please check your settings file.");
+		}
+
+		List<Thread> threads=new ArrayList<>();
+
+		//TODO: review that, for the moment we start all the applications ...
+		for (int i=0;i<apps.length;i++){
+			ContainerBuilder builder=new ContainerBuilder().arguments(argv);
+			builder.applicationConfig(apps[i]);
+			Container container=builder.build();
+			Thread th=new Thread(){
+				public void run(){
+					try {
+						container.start();
+					} catch (Throwable e) {
+						// TODO 
+						e.printStackTrace();
+					}
+				}
+			};
+			threads.add(th);
+			th.start();
+		}
+		
+		threads.forEach(it->{
+			try{
+				it.join();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		});
 	}
 }

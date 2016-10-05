@@ -130,7 +130,14 @@ public class EndpointModule extends ResourceBasedModule<ClientImpl, EndpointConf
 				}
 				
 				bind(Key.get(IClient.class,new ClientImpl(config.getName()))).toInstance(endpoint.getClient());
-				bind(Key.get(IServer.class,new ClientImpl(config.getName()))).toInstance(endpoint.getServer());
+				if (endpoint.getConfig().getClientConfig()!=null){
+					bind(Key.get(ClientConfig.class,new ClientImpl(config.getName()))).toInstance(endpoint.getConfig().getClientConfig());
+				}
+				
+				bind(Key.get(IServer.class,new ServerImpl(config.getName()))).toInstance(endpoint.getServer());
+				if (endpoint.getConfig().getServerConfig()!=null){
+					bind(Key.get(ServerConfig.class,new ServerImpl(config.getName()))).toInstance(endpoint.getConfig().getServerConfig());
+				}
 
 				for (Class<?> c : sd.getClientInterfaces()){
 					bind(Key.get((Class<Object>)c,new ClientImpl(config.getName()))).toProvider(new ClientProvider(config.getName(),c));

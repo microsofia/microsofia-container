@@ -19,7 +19,7 @@ import com.google.inject.BindingAnnotation;
  * </ol>
  */
 @BindingAnnotation
-@Target({ ElementType.TYPE}) 
+@Target({ ElementType.TYPE,ElementType.FIELD}) 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Server {
 	String value() default "default";

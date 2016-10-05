@@ -188,6 +188,15 @@ public class ContainerImpl extends Container{
 	public void injectMembers(Object object){
 		injector.injectMembers(object);
 	}
+	
+	/**
+	 * Returns an instance of type c with dependencies injected.
+	 * 
+	 * */
+	@Override
+	public <T> T getInstance(Class<T> c){
+		return injector.getInstance(c);
+	}
 
 	/**
 	 * Stops the container. This will method will stop any running thread, socket server, ... created by the container and 
