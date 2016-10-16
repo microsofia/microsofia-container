@@ -14,6 +14,7 @@ import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
+import microsofia.container.ClassUtils;
 import microsofia.container.InitializationContext;
 import microsofia.container.application.ApplicationDescriptor;
 import microsofia.container.module.ResourceBasedModule;

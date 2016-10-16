@@ -16,13 +16,13 @@
   <!-- proxies
    -->
   <proxies>
-	<proxy>
+	<!--proxy>
 		<active>true</active>
 		<protocol>http</protocol>
 		<host>172.21.192.20</host>
 		<port>3333</port>
 		<nonProxyHosts>localhost|127.0.0.1|172.21.16.0/20|*.lb.murex.com|*.fr.murex.com|beryte|callisto|nexus-lb</nonProxyHosts>
-	</proxy>
+	</proxy-->
   </proxies>
 
   <!-- mirrors
@@ -57,6 +57,11 @@
 			<id>eclipse-cpp-luna-4.4-R</id>
 			<name>eclipse-cpp-luna-4.4-R</name>
 			<url>http://nexus-lb:8081/nexus/content/repositories/eclipse-cpp-luna-4.4-R/</url>
+		</repository>
+		<repository>
+			<id>mvnrepo1</id>
+			<name>mvnrepo1</name>
+			<url>http://repo1.maven.org/maven2/</url>
 		</repository>
 	</repositories>
    

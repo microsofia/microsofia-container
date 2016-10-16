@@ -1,4 +1,4 @@
-package microsofia.container.module.endpoint;
+package microsofia.container;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

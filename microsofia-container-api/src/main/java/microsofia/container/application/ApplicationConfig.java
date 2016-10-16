@@ -10,6 +10,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
@@ -136,6 +137,8 @@ public class ApplicationConfig {
 	@XmlElementWrapper(name="endpoints")
 	@XmlElementRef
 	private List<EndpointConfig> endpointConfigs;
+	@XmlAnyElement
+	private Element[] element;
 	
 	public ApplicationConfig(){
 		properties=new ArrayList<>();
@@ -265,6 +268,14 @@ public class ApplicationConfig {
 	 * */
 	public void setEndpointConfigs(List<EndpointConfig> c) {
 		this.endpointConfigs = c;
+	}
+	
+	public Element[] getElement(){
+		return element;
+	}
+	
+	public void setElement(Element[] element){
+		this.element=element;
 	}
 
 	/**

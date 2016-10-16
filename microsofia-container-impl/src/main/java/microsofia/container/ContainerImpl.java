@@ -1,8 +1,11 @@
 package microsofia.container;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,9 +13,19 @@ import org.apache.commons.logging.LogFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.TypeLiteral;
+import com.google.inject.matcher.AbstractMatcher;
+import com.google.inject.matcher.Matchers;
+import com.google.inject.spi.InjectionListener;
+import com.google.inject.spi.TypeEncounter;
+import com.google.inject.spi.TypeListener;
 
+import microsofia.container.application.ApplicationProvider;
 import microsofia.container.application.IApplication;
 import microsofia.container.module.IModule;
+import microsofia.container.module.endpoint.Endpoint;
+import microsofia.container.module.endpoint.Export;
+import microsofia.container.module.endpoint.Server;
 
 /**
  * The implementation of a microsofia container.<br>
@@ -70,6 +83,26 @@ public class ContainerImpl extends Container{
 			@Override
 			protected void configure() {
 				bind(Container.class).toInstance(ContainerImpl.this);
+
+				//listen to Guice module for PostConstruct call
+				bindListener( Matchers.any() , new TypeListener() {//TODO document PostConstruct usage		
+				    @Override
+				    public <I> void hear(final TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
+				        typeEncounter.register(new InjectionListener<I>() {
+				            @Override
+				            public void afterInjection(Object i) {
+				            	try{
+					            	Method method=ClassUtils.getMethod(i, PostConstruct.class);
+					                if (method!=null){
+					                	method.invoke(i);
+					                }
+				            	}catch(Exception e){
+				            		throw new ContainerException(e.getMessage(), e);
+				            	}
+				            }
+				        });
+				    }
+				});
 			}
 		});
 	}
@@ -112,6 +145,12 @@ public class ContainerImpl extends Container{
 		//loading all available applications
 		ServiceLoader<IApplication> moduleLoader=ServiceLoader.load(IApplication.class,ContainerImpl.class.getClassLoader());
 		moduleLoader.forEach(applications::add);
+		
+		//loading all available applications from providers
+		ServiceLoader<ApplicationProvider> providerLoaders=ServiceLoader.load(ApplicationProvider.class,ContainerImpl.class.getClassLoader());
+		providerLoaders.forEach(it->{
+			it.getApplication(context).forEach(applications::add);
+		});
 		
 		//which available one has a type that we need
 		currentApplication=null;

@@ -5,8 +5,8 @@ import java.lang.reflect.Method;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import microsofia.container.ClassUtils;
 import microsofia.container.module.endpoint.AbstractServer;
-import microsofia.container.module.endpoint.ClassUtils;
 import microsofia.container.module.endpoint.Disconnect;
 import microsofia.container.module.endpoint.EndpointException;
 import microsofia.rmi.IClientInterestListener;
