@@ -1,8 +1,12 @@
 package microsofia.container.application;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
+
+import com.google.inject.AbstractModule;
 
 import microsofia.container.Container;
 import microsofia.container.InitializationContext;
@@ -17,12 +21,18 @@ public class DefaultApplication extends AbstractApplication{
 	protected Consumer<Object> startCallback;
 	protected Consumer<Object> stopCallback;
 	protected Object application;
+	protected List<AbstractModule> guiceModules;
 	
 	public DefaultApplication(String type,Class<?> applicationClass){
 		applicationDescriptor=new ApplicationDescriptor();
 		applicationDescriptor.type(type);
 		descriptorBuilder=new ApplicationDescriptorBuilder(applicationDescriptor);
 		this.applicationClass=applicationClass;
+		guiceModules=new ArrayList<>();
+	}
+	
+	public DefaultApplication(String type){
+		this(type,null);
 	}
 	
 	public void setInitialization(Consumer<InitializationContext> initialization){
@@ -41,18 +51,25 @@ public class DefaultApplication extends AbstractApplication{
 		descriptorBuilder.visit(c);
 	}
 	
+	public void addModule(AbstractModule module){
+		guiceModules.add(module);
+	}
+	
 	@Override
 	public void preInit(InitializationContext context) {
 		if (initialization!=null){
 			initialization.accept(context);
 		}
+		guiceModules.forEach(context::addGuiceModule);
 	}
 
 	@Override
 	public void run() throws Throwable{
-		application=container.getInstance(applicationClass);
-		if (startCallback!=null){
-			startCallback.accept(application);
+		if (applicationClass!=null){
+			application=container.getInstance(applicationClass);
+			if (startCallback!=null){
+				startCallback.accept(application);
+			}
 		}
 	}
 	

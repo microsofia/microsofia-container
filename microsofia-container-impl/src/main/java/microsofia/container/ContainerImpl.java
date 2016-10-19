@@ -14,7 +14,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.TypeLiteral;
-import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
@@ -23,9 +22,6 @@ import com.google.inject.spi.TypeListener;
 import microsofia.container.application.ApplicationProvider;
 import microsofia.container.application.IApplication;
 import microsofia.container.module.IModule;
-import microsofia.container.module.endpoint.Endpoint;
-import microsofia.container.module.endpoint.Export;
-import microsofia.container.module.endpoint.Server;
 
 /**
  * The implementation of a microsofia container.<br>
@@ -41,10 +37,12 @@ public class ContainerImpl extends Container{
 	private IApplication currentApplication;
 	//Guice injector
 	private Injector injector;
+	private List<ApplicationProvider> applicationProviders;
  	
 	public ContainerImpl(){
 		modules=new ArrayList<>();
 		applications=new ArrayList<IApplication>();
+		applicationProviders=new ArrayList<>();
 	}
 
 	/**
@@ -74,6 +72,10 @@ public class ContainerImpl extends Container{
 		return applications;
 	}
 
+	public void addApplicationProvider(ApplicationProvider provider){
+		applicationProviders.add(provider);
+	}
+	
 	/*
 	 * Adds native container Guice module.
 	 * */
@@ -149,6 +151,10 @@ public class ContainerImpl extends Container{
 		//loading all available applications from providers
 		ServiceLoader<ApplicationProvider> providerLoaders=ServiceLoader.load(ApplicationProvider.class,ContainerImpl.class.getClassLoader());
 		providerLoaders.forEach(it->{
+			it.getApplication(context).forEach(applications::add);
+		});
+		
+		applicationProviders.forEach(it->{
 			it.getApplication(context).forEach(applications::add);
 		});
 		
