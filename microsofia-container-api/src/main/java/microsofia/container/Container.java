@@ -2,7 +2,10 @@ package microsofia.container;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Element;
 
 import microsofia.container.application.ApplicationConfig;
@@ -13,6 +16,7 @@ import microsofia.container.application.ApplicationConfig;
  * 
  * */
 public abstract class Container {
+	private static Log log=LogFactory.getLog(Container.class);
 	protected String[] arguments;
 	protected ApplicationConfig applicationConfig;
  	
@@ -77,9 +81,9 @@ public abstract class Container {
 			throw new IllegalStateException("No application is configured to start. Please check your settings file.");
 		}
 
+		Vector<Throwable> ths=new Vector<>();
 		List<Thread> threads=new ArrayList<>();
 
-		//TODO: review that, for the moment we start all the applications ...
 		for (int i=0;i<apps.length;i++){
 			ContainerBuilder builder=new ContainerBuilder().arguments(argv);
 			builder.applicationConfig(apps[i]);
@@ -89,8 +93,9 @@ public abstract class Container {
 					try {
 						container.start();
 					} catch (Throwable e) {
-						// TODO 
 						e.printStackTrace();
+						log.error(e,e);
+						ths.add(e);
 					}
 				}
 			};
@@ -102,8 +107,12 @@ public abstract class Container {
 			try{
 				it.join();
 			}catch(Exception e){
-				e.printStackTrace();
+				log.error(e,e);
 			}
 		});
+		
+		if (ths.size()>0){
+			throw ths.get(0);//should throw all of them
+		}
 	}
 }

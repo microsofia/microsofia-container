@@ -80,6 +80,13 @@ public class ClassUtils {
 		return interf.toArray(new Class<?>[0]);
     }
 	
+	/**
+	 * Searchs for a Method having an annotation in a class.
+	 * 
+	 * @param o the object where to look for
+	 * @param ca the annotation type to look for
+	 * @return the Method found
+	 * */
 	public static <A extends Annotation> Method getMethod(Object o,Class<A> ca){
 		for (Method m : o.getClass().getMethods()){
 			if (m.isAnnotationPresent(ca)){

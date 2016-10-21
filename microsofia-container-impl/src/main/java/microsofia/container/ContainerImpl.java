@@ -37,6 +37,7 @@ public class ContainerImpl extends Container{
 	private IApplication currentApplication;
 	//Guice injector
 	private Injector injector;
+	//additional application providers
 	private List<ApplicationProvider> applicationProviders;
  	
 	public ContainerImpl(){
@@ -72,6 +73,9 @@ public class ContainerImpl extends Container{
 		return applications;
 	}
 
+	/**
+	 * Adds additional application providers.
+	 * */
 	public void addApplicationProvider(ApplicationProvider provider){
 		applicationProviders.add(provider);
 	}
@@ -87,14 +91,14 @@ public class ContainerImpl extends Container{
 				bind(Container.class).toInstance(ContainerImpl.this);
 
 				//listen to Guice module for PostConstruct call
-				bindListener( Matchers.any() , new TypeListener() {//TODO document PostConstruct usage		
+				bindListener( Matchers.any() , new TypeListener() {		
 				    @Override
 				    public <I> void hear(final TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
 				        typeEncounter.register(new InjectionListener<I>() {
 				            @Override
 				            public void afterInjection(Object i) {
 				            	try{
-					            	Method method=ClassUtils.getMethod(i, PostConstruct.class);
+					            	Method method=ClassUtils.getMethod(i, PostConstruct.class);//TODO document usage
 					                if (method!=null){
 					                	method.invoke(i);
 					                }

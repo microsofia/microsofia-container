@@ -6,7 +6,6 @@ import microsofia.container.module.endpoint.EndpointsDescriptor;
 import microsofia.container.module.jta.JTAsDescriptor;
 import microsofia.container.module.property.PropertiesDescriptor;
 
-//TODO think for a better way than builder nice API (example: at compile time metadatas generation, @annotation, ...)
 /**
  * The application descriptor contains the application and the modules metadatas.
  * */

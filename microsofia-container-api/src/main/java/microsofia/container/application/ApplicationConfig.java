@@ -270,10 +270,16 @@ public class ApplicationConfig {
 		this.endpointConfigs = c;
 	}
 	
+	/**
+	 * Returns the elements of the configuration contained. It allows the caller to have a custom configuration.
+	 * */
 	public Element[] getElement(){
 		return element;
 	}
 	
+	/**
+	 * Sets the elements of the configuration contained. It allows the caller to have a custom configuration.
+	 * */
 	public void setElement(Element[] element){
 		this.element=element;
 	}
