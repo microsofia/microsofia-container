@@ -39,7 +39,7 @@ public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyCo
 	private Map<Class<?>,JAXBContext> contexts;
 
 	public PropertyModule(){
-		super(Object.class);
+		super(Object.class,PropertyConfig.class);
 		cmdLineProperties=new HashMap<String, String>();
 		contexts=new HashMap<>();
 	}

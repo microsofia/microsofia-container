@@ -27,7 +27,7 @@ public class JPAModule extends ResourceBasedModule<JPAImpl, JPAConfig,EntityMana
 	private IJDBCModule jdbcModule;
 	
 	public JPAModule(){
-		super(EntityManagerFactory.class);
+		super(EntityManagerFactory.class,JPAConfig.class);
 	}
 	
 	/**

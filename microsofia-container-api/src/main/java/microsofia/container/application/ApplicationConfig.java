@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.w3c.dom.Element;
 
+import microsofia.container.module.atomix.AtomixConfig;
 import microsofia.container.module.db.jdbc.JDBCConfig;
 import microsofia.container.module.db.jpa.JPAConfig;
 import microsofia.container.module.endpoint.EndpointConfig;
@@ -137,6 +138,9 @@ public class ApplicationConfig {
 	@XmlElementWrapper(name="endpoints")
 	@XmlElementRef
 	private List<EndpointConfig> endpointConfigs;
+	@XmlElementWrapper(name="clusters")
+	@XmlElement(name="cluster")
+	private List<AtomixConfig> atomixConfigs;
 	@XmlAnyElement
 	private Element[] element;
 	
@@ -146,6 +150,7 @@ public class ApplicationConfig {
 		jdbcConfigs=new ArrayList<>();
 		jpaConfigs=new ArrayList<>();
 		endpointConfigs=new ArrayList<>();
+		atomixConfigs=new ArrayList<>();
 	}
 
 	/**
@@ -268,6 +273,14 @@ public class ApplicationConfig {
 	 * */
 	public void setEndpointConfigs(List<EndpointConfig> c) {
 		this.endpointConfigs = c;
+	}
+	
+	public List<AtomixConfig> getAtomixConfigs() {
+		return atomixConfigs;
+	}
+
+	public void setAtomixConfigs(List<AtomixConfig> atomixConfigs) {
+		this.atomixConfigs=atomixConfigs;
 	}
 	
 	/**

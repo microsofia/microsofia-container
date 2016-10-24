@@ -3,3 +3,4 @@ microsofia.container.module.jta.JTAModule
 microsofia.container.module.db.jdbc.JDBCModule
 microsofia.container.module.db.jpa.JPAModule
 microsofia.container.module.endpoint.EndpointModule
+microsofia.container.module.atomix.AtomixModule

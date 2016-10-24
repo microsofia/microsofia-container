@@ -10,7 +10,11 @@ import java.util.Stack;
 
 import javax.inject.Inject;
 
+import io.atomix.resource.Resource;
 import microsofia.container.ClassUtils;
+import microsofia.container.module.atomix.AtomixDescriptor;
+import microsofia.container.module.atomix.Cluster;
+import microsofia.container.module.atomix.ClusterConfiguration;
 import microsofia.container.module.db.jdbc.JDBC;
 import microsofia.container.module.db.jpa.JPA;
 import microsofia.container.module.endpoint.Client;
@@ -53,7 +57,7 @@ public class ApplicationDescriptorConfigurator {
 	 * 
 	 * @param c the class that will be parsed
 	 * */
-	public void parseClass(Class<?> c){
+	public void parseClass(Class<?> c) throws Exception{
 		//set used to avoid cyclic traversing
 		Stack<Class<?>> toVisit=new Stack<>();
 		
@@ -68,7 +72,7 @@ public class ApplicationDescriptorConfigurator {
 	/*
 	 * Parses one AnnotatedElement.
 	 * */
-	private void parseElement(Class<?> type,AnnotatedElement element,Stack<Class<?>> toVisit){	
+	private void parseElement(Class<?> type,AnnotatedElement element,Stack<Class<?>> toVisit) throws Exception{	
 		Inject inject=element.getAnnotation(Inject.class);
 		com.google.inject.Inject gInject=element.getAnnotation(com.google.inject.Inject.class);
 		if (inject!=null || gInject!=null){
@@ -111,10 +115,28 @@ public class ApplicationDescriptorConfigurator {
 				EndpointDescriptor endDesc=(EndpointDescriptor)applicationDescriptor.endpoints().endpoint(client.value()).required(required);
 				endDesc.addClientInterface(type);
 			}
+			
+			//handling atomix
+			Cluster cluster=element.getAnnotation(Cluster.class);
+			if (cluster!=null){
+				AtomixDescriptor atomixDesc=(AtomixDescriptor)applicationDescriptor.atomixs().atomix(cluster.value()).required(required);
+				ClusterConfiguration cc=element.getAnnotation(ClusterConfiguration.class);
+				if (cc!=null){
+					if (cc.configurator().length>0){
+						atomixDesc.configurator((cc.configurator()[0]).newInstance());
+					}
+					if (cc.resources().length>0){
+						for (Class<? extends Resource<?>> c : cc.resources()){
+							atomixDesc.resource(c);
+						}
+					}
+				}
+			}
+			
 		}
 	}
 	
-	protected void parseClass(Class<?> c,Stack<Class<?>> toVisit){
+	protected void parseClass(Class<?> c,Stack<Class<?>> toVisit) throws Exception{
 		Constructor<?>[] constructors=c.getDeclaredConstructors();
 		if (constructors!=null){
 			for (Constructor<?> constructor : constructors){

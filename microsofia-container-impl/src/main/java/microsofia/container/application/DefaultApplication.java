@@ -77,7 +77,7 @@ public class DefaultApplication extends AbstractApplication{
 	 * 
 	 * @param c the class to parse
 	 * */
-	public void parseClass(Class<?> c){
+	public void parseClass(Class<?> c) throws Exception{
 		descriptorConfigurator.parseClass(c);
 	}
 	

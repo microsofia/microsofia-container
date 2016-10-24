@@ -116,11 +116,13 @@ public class ContainerImpl extends Container{
 	/*
 	 * First iteration of the modules in order to pre-initialize the modules
 	 */
-	private void preInitModules(InitializationContext context){
+	private void loadModules(InitializationContext context){
 		ServiceLoader<IModule> moduleLoader=ServiceLoader.load(IModule.class,ContainerImpl.class.getClassLoader());
 		moduleLoader.forEach(modules::add);
 		context.setContainerModules(modules);
-		
+	}
+	
+	private void preInitModules(InitializationContext context){		
 		modules.stream().forEach(it->{
 			it.preInit(context);
 		});
@@ -175,10 +177,13 @@ public class ContainerImpl extends Container{
 		}
 		//we set the found one in the context
 		context.setCurrentApplication(currentApplication);
-		
-		//pre-init of the application
-		currentApplication.preInit(context);
+
 		return currentApplication;
+	}
+	
+	//pre-init of the application	
+	private void preInitApplication(InitializationContext context){		
+		currentApplication.preInit(context);
 	}
 	
 	/*
@@ -205,11 +210,17 @@ public class ContainerImpl extends Container{
 		addNativeModules(context);
 
 		log.info("Loading modules...");
-		preInitModules(context);
+		loadModules(context);
 		
 		log.info("Loading application(s)...");
 		currentApplication=loadApplication(context);
 	
+		log.info("Pre-Init modules...");
+		preInitModules(context);
+		
+		log.info("Pre-Init application(s)...");
+		preInitApplication(context);
+		
 		//create Guice injector
 		injector=Guice.createInjector(context.getGuiceModules());
 		context.setInjector(injector);

@@ -18,6 +18,8 @@ import microsofia.container.application.ApplicationDescriptor;
 public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extends ResourceConfig, R, RD extends ResourceDescriptor, RMD extends ResourceModuleDescriptor<RD>> extends AbstractModule{
 	//the class type of the resource
 	protected Class<R> resourceClass;
+	//the class type of the resource
+	protected Class<C> configClass;
 	//configuration of the module
 	protected Map<String,C> configs;
 	//the created resources
@@ -30,8 +32,9 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 	 * 
 	 * @param resourceClass the type of the resource managed by the module
 	 * */
-	protected ResourceBasedModule(Class<R> resourceClass) {
+	protected ResourceBasedModule(Class<R> resourceClass,Class<C> configClass) {
 		this.resourceClass=resourceClass;
+		this.configClass=configClass;
 		configs=new Hashtable<>();
 		resources=new Hashtable<>();
 	}
@@ -78,17 +81,7 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 		cs.forEach(it->{
 			configs.put(it.getName(), it);
 		});
-
-		//creating and adding a Guice module
-		context.addGuiceModule(createGuiceModule(context));
-	}
-
-	/**
-	 * Post-initialization consists of checking that all required resources in the module descriptor
-	 * have an actual configuration.
-	 * */
-	@Override
-	public void postInit(InitializationContext context){		
+		
 		//checking the existence of required resources
 		moduleDescriptor=getResourceModuleDescriptor(context.getCurrentApplication().getDescriptor());
 		if (moduleDescriptor!=null){
@@ -98,6 +91,17 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 				}
 			});
 		}
+
+		//creating and adding a Guice module
+		context.addGuiceModule(createGuiceModule(context));
+	}
+
+	/**
+	 * Post-initialization.
+	 * */
+	@Override
+	public void postInit(InitializationContext context){		
+
 	}
 
 	/**
@@ -138,17 +142,17 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 			return resource;
 		}
 		
-		synchronized(this){
+		C c=configs.get(name);
+		if (c==null){
+			throw new ContainerException("Configuration for resource "+name+" not found.");
+		}
+		
+		synchronized(c){
 			resource=resources.get(name);
 			if (resource!=null){
 				return resource;
 			}
 			
-			C c=configs.get(name);
-			if (c==null){
-				throw new ContainerException("Configuration for resource "+name+" not found.");
-			}
-
 			resource=createResource(name,c);
 			resources.put(name, resource);
 		}
@@ -170,6 +174,7 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 			configs.entrySet().forEach(it->{
 				//for every resource, default bindings
 				bind(Key.get(resourceClass,(Annotation)createResourceAnnotation(it.getKey()))).toProvider(new ResourceProvider(it.getKey()));
+				bind(Key.get(configClass,(Annotation)createResourceAnnotation(it.getKey()))).toInstance(configs.get(it.getKey()));
 			});
 		}
 	}
@@ -177,26 +182,38 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 	/**
 	 * Default provider that will provide the default resource type based on its name.
 	 * */
-	protected class ResourceProvider implements Provider<R>{
+	protected class ResourceProvider extends GenericProvider<R>{
+		
+		public ResourceProvider(String name){
+			super(resourceClass,name);
+		}		
+	}
+	
+	/**
+	 * Generic provider that will provide the default resource type based on its name.
+	 * */
+	protected class GenericProvider<O> implements Provider<O>{
+		private Class<O> c;
 		private String name;
 		private R resource;
 		
-		ResourceProvider(String name){
+		public GenericProvider(Class<O> c,String name){
+			this.c=c;
 			this.name=name;
 		}
 		
 		@Override
-		public R get() {
+		public O get() {
 			if (resource!=null){
-				return resource;
+				return c.cast(resource);
 			}
 			synchronized(this){
 				if (resource!=null){
-					return resource;
+					return c.cast(resource);
 				}
 				resource=getResource(name);
 			}
-			return resource;
+			return c.cast(resource);
 		}		
 	}
 }

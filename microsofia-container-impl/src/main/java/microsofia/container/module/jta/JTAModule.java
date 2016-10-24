@@ -16,7 +16,7 @@ import microsofia.container.module.ResourceBasedModule;
 public class JTAModule extends ResourceBasedModule<JTAImpl, JTAConfig,TransactionManager, JTADescriptor, JTAsDescriptor> implements IJTAModule{
 	
 	public JTAModule(){
-		super(TransactionManager.class);
+		super(TransactionManager.class,JTAConfig.class);
 	}
 
 	/**

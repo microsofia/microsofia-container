@@ -62,6 +62,11 @@ public class TestApplication extends AbstractApplication{
 		applicationDescriptor.properties().property("k3").numericType().required(true);
 
 		applicationDescriptor.properties().property("k7").objectType(TestPropertyModule.Configuration.class);
+		
+		applicationDescriptor.atomixs().atomix("client");
+		applicationDescriptor.atomixs().atomix("server1");
+		applicationDescriptor.atomixs().atomix("server2");
+		applicationDescriptor.atomixs().atomix("server3");
 	}
 	
 	public Container getContainer(){

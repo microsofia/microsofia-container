@@ -25,7 +25,7 @@ public class JDBCModule extends ResourceBasedModule<JDBCImpl, JDBCConfig,DataSou
 	private IJTAModule jtaModule;
 	
 	public JDBCModule(){
-		super(DataSource.class);
+		super(DataSource.class,JDBCConfig.class);
 	}
 
 	/**

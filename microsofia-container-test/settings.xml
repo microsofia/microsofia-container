@@ -138,5 +138,35 @@
 				</server>
 			</endpoint.msofiarmi>
 		</endpoints>
+		<clusters>
+			<cluster name="client">
+				<members>
+					<member host="localhost" port="9876"/>
+					<member host="localhost" port="9877"/>
+					<member host="localhost" port="9878"/>
+				</members>
+			</cluster>
+			<cluster name="server1">
+				<localmember host="localhost" port="9876"/>
+				<members>
+					<member host="localhost" port="9877"/>
+					<member host="localhost" port="9878"/>
+				</members>
+			</cluster>
+			<cluster name="server2">
+				<localmember host="localhost" port="9877"/>
+				<members>
+					<member host="localhost" port="9876"/>
+					<member host="localhost" port="9878"/>
+				</members>
+			</cluster>
+			<cluster name="server3">
+				<localmember host="localhost" port="9878"/>
+				<members>
+					<member host="localhost" port="9876"/>
+					<member host="localhost" port="9877"/>
+				</members>
+			</cluster>
+		</clusters>
    </application>
 </settings>

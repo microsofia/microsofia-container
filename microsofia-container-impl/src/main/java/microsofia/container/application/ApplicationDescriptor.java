@@ -1,5 +1,6 @@
 package microsofia.container.application;
 
+import microsofia.container.module.atomix.AtomixsDescriptor;
 import microsofia.container.module.db.jdbc.JDBCsDescriptor;
 import microsofia.container.module.db.jpa.JPAsDescriptor;
 import microsofia.container.module.endpoint.EndpointsDescriptor;
@@ -22,6 +23,7 @@ public class ApplicationDescriptor {
 	private JPAsDescriptor jpasDescriptor;
 	//endpoint module descriptor
 	private EndpointsDescriptor endpoints;
+	private AtomixsDescriptor atomixsDescriptor;
 
 	public ApplicationDescriptor(){
 		propertiesDescriptor=new PropertiesDescriptor();
@@ -29,6 +31,7 @@ public class ApplicationDescriptor {
 		jdbcsDescriptor=new JDBCsDescriptor();
 		endpoints=new EndpointsDescriptor();
 		jpasDescriptor=new JPAsDescriptor();
+		atomixsDescriptor=new AtomixsDescriptor();
 	}
 
 	/**
@@ -121,5 +124,13 @@ public class ApplicationDescriptor {
 	 * */
 	public EndpointsDescriptor getEndpointsDescriptor(){
 		return endpoints;
+	}
+	
+	public AtomixsDescriptor atomixs() {
+		return atomixsDescriptor;
+	}
+
+	public AtomixsDescriptor getAtomixsDescriptor() {
+		return atomixsDescriptor;
 	}
 }

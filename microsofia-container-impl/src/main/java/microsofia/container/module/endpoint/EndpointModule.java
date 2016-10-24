@@ -27,7 +27,7 @@ import microsofia.container.module.ResourceBasedModule;
 public class EndpointModule extends ResourceBasedModule<ClientImpl, EndpointConfig,Endpoint,EndpointDescriptor,EndpointsDescriptor> implements IEndpointModule{
 
 	public EndpointModule() {
-		super(Endpoint.class);
+		super(Endpoint.class,EndpointConfig.class);
 	}
 	
 	/**
