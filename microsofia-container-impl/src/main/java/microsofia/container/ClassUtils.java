@@ -2,8 +2,8 @@ package microsofia.container;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class introspection utilities.
@@ -65,7 +65,7 @@ public class ClassUtils {
 	 * @return the list of interfaces
 	 * */
 	public static <A extends Annotation> Class<?>[] getInterfacesWithAnnotation(Class<?> c,Class<A> ca){
-		List<Class<?>> interf=new ArrayList<Class<?>>();
+		Set<Class<?>> interf=new HashSet<Class<?>>();
 		while (c!=null){
 			if (c.getInterfaces()!=null){
 				for (Class<?> i : c.getInterfaces()){

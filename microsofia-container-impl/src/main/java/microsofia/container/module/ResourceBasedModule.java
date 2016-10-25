@@ -87,7 +87,7 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 		if (moduleDescriptor!=null){
 			moduleDescriptor.getDescriptor().values().forEach(it->{
 				if (it.isRequired() && configs.get(it.getName())==null){
-					throw new ContainerException("Resource "+it+" is required.");
+					throw new ContainerException("Resource "+it+" is required for type "+getClass().getSimpleName());
 				}
 			});
 		}

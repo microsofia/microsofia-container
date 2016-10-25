@@ -1,7 +1,9 @@
 package microsofia.container.module.db.jpa;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import microsofia.container.module.ResourceDescriptor;
 
@@ -9,11 +11,11 @@ import microsofia.container.module.ResourceDescriptor;
  * JPA resource descriptor. The entity classes are needed in order to create the EntityManagerFactory.
  * */
 public class JPADescriptor extends ResourceDescriptor{
-	private List<Class<?>> entitiesClass;
+	private Set<Class<?>> entitiesClass;
 
 	public JPADescriptor(String name){
 		super(name);
-		entitiesClass=new ArrayList<Class<?>>();
+		entitiesClass=new HashSet<Class<?>>();
 	}
 	
 	/**
@@ -34,7 +36,7 @@ public class JPADescriptor extends ResourceDescriptor{
 	/**
 	 * Returns the entity classes.
 	 * */
-	public List<Class<?>> getEntitiesClass() {
+	public Set<Class<?>> getEntitiesClass() {
 		return entitiesClass;
 	}
 
@@ -52,7 +54,7 @@ public class JPADescriptor extends ResourceDescriptor{
 	/**
 	 * Sets the entity classes.
 	 * */
-	public void setEntitiesClass(List<Class<?>> entitiesClass) {
+	public void setEntitiesClass(Set<Class<?>> entitiesClass) {
 		this.entitiesClass = entitiesClass;
 	}
 }

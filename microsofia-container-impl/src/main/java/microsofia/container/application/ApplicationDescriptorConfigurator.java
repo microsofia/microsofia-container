@@ -16,7 +16,9 @@ import microsofia.container.module.atomix.AtomixDescriptor;
 import microsofia.container.module.atomix.Cluster;
 import microsofia.container.module.atomix.ClusterConfiguration;
 import microsofia.container.module.db.jdbc.JDBC;
+import microsofia.container.module.db.jpa.Entities;
 import microsofia.container.module.db.jpa.JPA;
+import microsofia.container.module.db.jpa.JPADescriptor;
 import microsofia.container.module.endpoint.Client;
 import microsofia.container.module.endpoint.EndpointDescriptor;
 import microsofia.container.module.endpoint.Server;
@@ -107,6 +109,13 @@ public class ApplicationDescriptorConfigurator {
 			JPA jpa=element.getAnnotation(JPA.class);
 			if (jpa!=null){
 				applicationDescriptor.jpas().jpa(jpa.value()).required(required);//caller should fill the entities
+				Entities entities=element.getAnnotation(Entities.class);
+				if (entities!=null){
+					JPADescriptor desc=applicationDescriptor.jpas().jpa(jpa.value());
+					for (Class<?> c : entities.value()){
+						desc.entity(c);
+					}
+				}
 			}
 			
 			//handling endpoints

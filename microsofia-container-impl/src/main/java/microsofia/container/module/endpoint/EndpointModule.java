@@ -213,8 +213,13 @@ public class EndpointModule extends ResourceBasedModule<ClientImpl, EndpointConf
 	 * */
 	protected String getServerId(Object object,Class<?>[] interf){
 		Id id=ClassUtils.getAnnotationOnInterface(object.getClass(), Id.class);
-		if (id!=null){
+		if (id!=null && id.value()!=null && id.value().trim().length()>0){
 			return id.value();
+		}
+		for (Class<?> c : interf){
+			if (c.getAnnotation(Id.class)!=null){
+				return c.getName();
+			}
 		}
 		if (interf.length>0){
 			return interf[0].getName();//return the class name of the first interface annotated with @Server ...
@@ -237,7 +242,7 @@ public class EndpointModule extends ResourceBasedModule<ClientImpl, EndpointConf
 			this.name=name;
 			this.interf=interf;
 			Id aid=ClassUtils.getAnnotationOnInterface(interf, Id.class);
-			if (aid!=null){
+			if (aid!=null && aid.value()!=null && aid.value().trim().length()>0){
 				id=aid.value();
 			}else{
 				id=interf.getName();
