@@ -29,7 +29,7 @@ import microsofia.container.module.property.PropertyDescriptor;
 //TODO unit tests
 /**
  * Helper configurator used to configure ApplicationDescritor by parsing classes that will be used
- * by the container. Instead of statically configure the ApplicationDescriptor, it is more dynamic to use
+ * by the container. Instead of statically configuring the ApplicationDescriptor, it is more dynamic and less error prone to use
  * the configurator.
  * 
  * */

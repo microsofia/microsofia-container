@@ -55,7 +55,7 @@ public class MSofiaRMIServer extends AbstractServer<MSofiaRMIServerConfig>{
 							//find the exported object for every id
 							Object o=server.getRegistry().getObject(id);
 							if (o!=null){
-								//look for a method annoated with @Disconnect
+								//look for a method annotated with @Disconnect
 								Method m=ClassUtils.getMethod(o,Disconnect.class);
 								if (m!=null){
 									m.invoke(o);

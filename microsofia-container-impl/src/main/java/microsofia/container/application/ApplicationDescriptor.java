@@ -23,6 +23,7 @@ public class ApplicationDescriptor {
 	private JPAsDescriptor jpasDescriptor;
 	//endpoint module descriptor
 	private EndpointsDescriptor endpoints;
+	//atomix module descriptor
 	private AtomixsDescriptor atomixsDescriptor;
 
 	public ApplicationDescriptor(){
@@ -126,10 +127,16 @@ public class ApplicationDescriptor {
 		return endpoints;
 	}
 	
+	/**
+	 * Returns the Atomix module descriptor.
+	 * */
 	public AtomixsDescriptor atomixs() {
 		return atomixsDescriptor;
 	}
 
+	/**
+	 * Returns the Atomix module descriptor.
+	 * */
 	public AtomixsDescriptor getAtomixsDescriptor() {
 		return atomixsDescriptor;
 	}

@@ -17,8 +17,11 @@ import com.google.inject.BindingAnnotation;
  * Examples:<br />
  * <br />
  * <code> <pre> public class Sample{ <br />
-<br /> &#64;Inject<br /> <span class=
-"tags">@JPA("persitent-unit_name")</span>  <br /> EntityManagerFactory entityManagerFactory;<br />
+<br /> 
+<span class="tags">&#64;Inject</span>
+<span class="tags">@Entities({MyEntity1.class,MyEntity2.class}) //entities used to configure the EntityManagerFactory/SessionFactory </span> 
+<span class="tags">@JPA("persitent-unit_name")</span>
+ EntityManagerFactory entityManagerFactory;<br />
   <br /> }  <br /> </pre> </code> The JPA module loads from the application
  * configuration the needed informations in order to create the resources to
  * inject.

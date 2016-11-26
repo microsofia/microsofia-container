@@ -275,7 +275,12 @@ public class PropertyModule extends ResourceBasedModule<PropertyImpl, PropertyCo
 		@Override
 		public N get() {
 			try {
-				return cons.newInstance(getStringProperty(name));
+				String s=getStringProperty(name);
+				if (s!=null){
+					return cons.newInstance(s);
+				}else{
+					return null;
+				}
 			} catch (Exception e) {
 				throw new PropertyException(e.getMessage(), e);
 			} 

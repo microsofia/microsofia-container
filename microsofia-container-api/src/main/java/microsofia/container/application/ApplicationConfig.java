@@ -275,23 +275,35 @@ public class ApplicationConfig {
 		this.endpointConfigs = c;
 	}
 	
+	/**
+	 * Returns the Atomix module configuration
+	 * 
+	 * @return the Atomix module configuration
+	 * */
 	public List<AtomixConfig> getAtomixConfigs() {
 		return atomixConfigs;
 	}
 
+	/**
+	 * Sets the Atomix module configuration.
+	 * 
+	 * @param atomixConfigs the Atomix module configuration
+	 * */
 	public void setAtomixConfigs(List<AtomixConfig> atomixConfigs) {
 		this.atomixConfigs=atomixConfigs;
 	}
 	
 	/**
-	 * Returns the elements of the configuration contained. It allows the caller to have a custom configuration.
+	 * Returns the configuration that the container couldn't unmarshal. 
+	 * It can allow the caller to have a custom configuration.
 	 * */
 	public Element[] getElement(){
 		return element;
 	}
 	
 	/**
-	 * Sets the elements of the configuration contained. It allows the caller to have a custom configuration.
+	 * Sets a custom configuration that is not container specific. 
+	 * It can allow the caller to have a custom configuration.
 	 * */
 	public void setElement(Element[] element){
 		this.element=element;

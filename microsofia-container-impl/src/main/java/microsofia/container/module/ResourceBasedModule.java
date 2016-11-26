@@ -144,7 +144,11 @@ public abstract class ResourceBasedModule<A extends ResourceAnnotation, C extend
 		
 		C c=configs.get(name);
 		if (c==null){
-			throw new ContainerException("Configuration for resource "+name+" not found.");
+			if (moduleDescriptor.getDescriptor(name).isRequired()){
+				throw new ContainerException("Configuration for resource "+name+" not found.");
+			}else{
+				return null;
+			}
 		}
 		
 		synchronized(c){

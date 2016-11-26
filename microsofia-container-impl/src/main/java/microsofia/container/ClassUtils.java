@@ -81,7 +81,7 @@ public class ClassUtils {
     }
 	
 	/**
-	 * Searchs for a Method having an annotation in a class.
+	 * Searches for a Method having an annotation in a class.
 	 * 
 	 * @param o the object where to look for
 	 * @param ca the annotation type to look for

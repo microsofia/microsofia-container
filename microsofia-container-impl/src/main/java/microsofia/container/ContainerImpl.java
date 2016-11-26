@@ -114,7 +114,7 @@ public class ContainerImpl extends Container{
 	}
 	
 	/*
-	 * First iteration of the modules in order to pre-initialize the modules
+	 * Loading the modules
 	 */
 	private void loadModules(InitializationContext context){
 		ServiceLoader<IModule> moduleLoader=ServiceLoader.load(IModule.class,ContainerImpl.class.getClassLoader());
@@ -122,6 +122,9 @@ public class ContainerImpl extends Container{
 		context.setContainerModules(modules);
 	}
 	
+	/*
+	 * First iteration of the modules in order to pre-initialize the modules
+	 */
 	private void preInitModules(InitializationContext context){		
 		modules.stream().forEach(it->{
 			it.preInit(context);
@@ -198,7 +201,6 @@ public class ContainerImpl extends Container{
 	 * Method that will trigger the container to load its modules and to start the application using
 	 * the available configuration (the application configuration and the arguments).
 	 * 
-	 * @return the started application
 	 * */
 	public void start() throws Throwable{
 		//creating the context that will be used for startup
